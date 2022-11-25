@@ -1,0 +1,2 @@
+#define AnalyzeGPX_Widgets_VERSION_MAJOR @AnalyzeGPX_Widgets_VERSION_MAJOR@
+#define AnalyzeGPX_Widgets_VERSION_MINOR @AnalyzeGPX_Widgets_VERSION_MINOR@
