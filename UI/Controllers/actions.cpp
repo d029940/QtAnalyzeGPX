@@ -35,12 +35,21 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
 **
 ****************************************************************************/
+#include <QFileDialog>
+#include <QStandardpaths>
 #include "actions.h"
 
 Actions::Actions() { }
 
 void Actions::loadGarminDirs() { }
 
-void Actions::openGpxFile() { }
+void Actions::openGpxFile()
+{
+    QStringList lst = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);
+    QString filename =
+            QFileDialog::getOpenFileName(nullptr, QFileDialog::tr("Open GPX file"), lst.front(),
+                                         QFileDialog::tr("GPX (*.gpx *.GPX)"));
+    // TODO: emit signal
+}
 
 void Actions::deleteGpxFile() { }

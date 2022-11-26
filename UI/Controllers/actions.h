@@ -35,16 +35,19 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
 **
 ****************************************************************************/
-#ifndef ACTIONS_H
-#define ACTIONS_H
+#pragma once
 
-class Actions
+#include <QObject>
+
+class Actions : public QObject
 {
+    Q_OBJECT
+
 public:
     Actions();
+
+public slots:
     void loadGarminDirs();
     void openGpxFile();
     void deleteGpxFile();
 };
-
-#endif // ACTIONS_H

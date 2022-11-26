@@ -42,6 +42,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 {
     ui->setupUi(this);
     connect(ui->exitButton, &QPushButton::clicked, &QCoreApplication::exit);
+    connect(ui->openGpxButton, &QPushButton::clicked, &m_controller, &Actions::openGpxFile);
 }
 
 MainWindow::~MainWindow()

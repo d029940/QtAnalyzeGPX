@@ -38,6 +38,7 @@
 #pragma once
 
 #include <QMainWindow>
+#include "actions.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -55,4 +56,5 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    Actions m_controller{};
 };
