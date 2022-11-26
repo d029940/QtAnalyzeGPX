@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1203</width>
-    <height>600</height>
+    <width>1048</width>
+    <height>562</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,10 +21,45 @@
        <enum>Qt::Horizontal</enum>
       </property>
       <widget class="QTreeView" name="dirTreeView"/>
-      <widget class="QListView" name="trkListView"/>
-      <widget class="QListView" name="wptListView"/>
-      <widget class="QListView" name="rteListView"/>
+      <widget class="QTableView" name="trkListView"/>
+      <widget class="QTableView" name="wptListView"/>
+      <widget class="QTableView" name="rteListView"/>
      </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QPushButton" name="loadGpxButton">
+        <property name="text">
+         <string>L&amp;oad Garmin Devices</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="openGpxButton">
+        <property name="text">
+         <string>&amp;Open GPX file</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="deleteGpxButton">
+        <property name="toolTip">
+         <string extracomment="Delete selected GPX file"/>
+        </property>
+        <property name="text">
+         <string>&amp;Delete GPX File</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="exitButton">
+        <property name="text">
+         <string>E&amp;xit</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>
@@ -33,7 +68,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1203</width>
+     <width>1048</width>
      <height>22</height>
     </rect>
    </property>

@@ -35,16 +35,52 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
 **
 ****************************************************************************/
-#include "mainwindow.h"
-#include "./ui_mainwindow.h"
+#ifndef GARMINTREENODE_H
+#define GARMINTREENODE_H
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
-{
-    ui->setupUi(this);
-    connect(ui->exitButton, &QPushButton::clicked, &QCoreApplication::exit);
-}
+#include <QString>
+#include <vector>
+using std::vector;
+#include <memory>
+using std::shared_ptr;
+using std::weak_ptr;
 
-MainWindow::~MainWindow()
+///
+/// \brief Represents a Garmin tree node
+/// A tree node is either a Volume/Garmin/GPX folder or a gpx file
+/// Per node, the name and the full path is stored
+/// Tree nodes are linked using shared pointers
+///
+class GarminTreeNode : std::enable_shared_from_this<GarminTreeNode>
 {
-    delete ui;
-}
+public:
+    explicit GarminTreeNode(const QString& name,
+                            const QString& fullPath,
+                            shared_ptr<GarminTreeNode> parent = nullptr);
+
+    // ----- Manaage the children of a node ----
+    void appendChild(shared_ptr<GarminTreeNode> child);
+    size_t childCount() const;
+
+    // reset GarminTreeNode to its initial values
+    void resetTreeNode();
+
+    // ----- Getters -----
+    QString name() const;
+    QString fullPath() const;
+    weak_ptr<GarminTreeNode> parent() const;
+    shared_ptr<GarminTreeNode> child(size_t index);
+    vector<shared_ptr<GarminTreeNode>> children() const;
+    int row() const;
+
+    // ----- Debug ----
+    void dumpTree() const;
+
+private:
+    QString m_name;
+    QString m_fullPath;
+    weak_ptr<GarminTreeNode> m_parent;
+    vector<shared_ptr<GarminTreeNode>> m_children;
+};
+
+#endif // GARMINTREENODE_H

@@ -2,7 +2,7 @@ project(AnalyzeGPX_Widgets VERSION 0.1
     DESCRIPTION "Analyze Garmin GPX files (Widget Version)"
     LANGUAGES CXX)
 
-configure_file(AnalyzeGPX_Widgets.h.in AnalyzeGPX_Widgets.h)
+configure_file(AnalyzeGPX_Widgets_config.h.in AnalyzeGPX_Widgets_config.h)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -43,7 +43,7 @@ endif()
 
 target_link_directories(${EXECUTABLE_NAME} PUBLIC ${PROJECT_BINARY_DIR})
 
-target_link_libraries(${EXECUTABLE_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(${EXECUTABLE_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets model)
 
 set_target_properties(${EXECUTABLE_NAME} PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER analyze.manfredkern.com

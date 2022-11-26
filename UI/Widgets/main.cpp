@@ -38,7 +38,7 @@
 #include <QApplication>
 #include <iostream>
 
-#include "AnalyzeGPX_Widgets.h"
+#include "AnalyzeGPX_Widgets_config.h"
 #include "mainwindow.h"
 
 int main(int argc, char *argv[])

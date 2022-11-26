@@ -35,16 +35,12 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
 **
 ****************************************************************************/
-#include "mainwindow.h"
-#include "./ui_mainwindow.h"
+#include "actions.h"
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
-{
-    ui->setupUi(this);
-    connect(ui->exitButton, &QPushButton::clicked, &QCoreApplication::exit);
-}
+Actions::Actions() { }
 
-MainWindow::~MainWindow()
-{
-    delete ui;
-}
+void Actions::loadGarminDirs() { }
+
+void Actions::openGpxFile() { }
+
+void Actions::deleteGpxFile() { }
