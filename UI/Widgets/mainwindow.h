@@ -38,7 +38,6 @@
 #pragma once
 
 #include <QMainWindow>
-#include "actions.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -54,7 +53,8 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    Ui::MainWindow *getUi() const;
+
 private:
     Ui::MainWindow *ui;
-    Actions m_controller{};
 };

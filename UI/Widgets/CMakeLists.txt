@@ -16,6 +16,8 @@ set(PROJECT_SOURCES
         mainwindow.cpp
         mainwindow.h
         mainwindow.ui
+        controller.h
+        controller.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -41,9 +43,10 @@ else()
     endif()
 endif()
 
-target_link_directories(${EXECUTABLE_NAME} PUBLIC ${PROJECT_BINARY_DIR})
+#target_link_directories(${EXECUTABLE_NAME} PUBLIC ${PROJECT_BINARY_DIR})
+target_link_directories(${EXECUTABLE_NAME} PRIVATE ${PROJECT_BINARY_DIR})
 
-target_link_libraries(${EXECUTABLE_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets model controller)
+target_link_libraries(${EXECUTABLE_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets model)
 
 set_target_properties(${EXECUTABLE_NAME} PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER analyze.manfredkern.com

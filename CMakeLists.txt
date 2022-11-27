@@ -21,8 +21,6 @@ add_subdirectory(UI/Widgets)
 # Sources for the the models
 add_subdirectory(Models)
 
-# Sources for Controllers
-add_subdirectory(UI/Controllers)
 
 
 

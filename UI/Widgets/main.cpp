@@ -39,7 +39,7 @@
 #include <iostream>
 
 #include "AnalyzeGPX_Widgets_config.h"
-#include "mainwindow.h"
+#include "controller.h"
 
 int main(int argc, char *argv[])
 {
@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
               << AnalyzeGPX_Widgets_VERSION_MINOR << std::endl;
 
     QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
+
+    Controller mv{};
     return a.exec();
 }
