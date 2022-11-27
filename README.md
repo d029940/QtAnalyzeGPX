@@ -1,4 +1,4 @@
-# AnalyzeGPXSplitview
+# AnalyzeGPX
 Analyse (Garmin) GPX files
 
 Shows routes, tracks and waypoints of a GPX file. Tested only with Garmin GPX files.
