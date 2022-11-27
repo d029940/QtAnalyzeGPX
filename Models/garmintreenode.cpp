@@ -42,10 +42,9 @@
 
 using namespace std;
 
-GarminTreeNode::GarminTreeNode(const QString& name,
-                               const QString& fullPath,
-                               shared_ptr<GarminTreeNode> parent) :
-    m_name{name}, m_fullPath{fullPath}, m_parent{parent}
+GarminTreeNode::GarminTreeNode(const QString &name, const QString &fullPath,
+                               shared_ptr<GarminTreeNode> parent)
+    : m_name{ name }, m_fullPath{ fullPath }, m_parent{ parent }
 {
 }
 
@@ -93,7 +92,7 @@ shared_ptr<GarminTreeNode> GarminTreeNode::child(size_t index)
         return nullptr;
 }
 
-vector<shared_ptr<GarminTreeNode> > GarminTreeNode::children() const
+vector<shared_ptr<GarminTreeNode>> GarminTreeNode::children() const
 {
     return m_children;
 }
@@ -102,14 +101,13 @@ int GarminTreeNode::row() const
 {
     if (!m_parent.expired()) {
         shared_ptr<GarminTreeNode> parent = m_parent.lock();
-        auto itr = find_if(parent->m_children.cbegin(),
-                           parent->m_children.cend(),
-        [this](const shared_ptr<GarminTreeNode> node) {
-            if (node.get() == this)
-                return true;
-            else
-                return false;
-        });
+        auto itr = find_if(parent->m_children.cbegin(), parent->m_children.cend(),
+                           [this](const shared_ptr<GarminTreeNode> node) {
+                               if (node.get() == this)
+                                   return true;
+                               else
+                                   return false;
+                           });
         if (itr != parent->m_children.cend()) {
             return static_cast<int>(distance(parent->m_children.cbegin(), itr));
         }
@@ -122,9 +120,8 @@ int GarminTreeNode::row() const
 void GarminTreeNode::dumpTree() const
 {
     qDebug() << "Name: " << m_name << " Path: " << m_fullPath << " Children: " << m_children.size();
-    for (shared_ptr<GarminTreeNode> child : m_children) {
+    for (const shared_ptr<GarminTreeNode> &child : m_children) {
         qDebug() << "---- Children: -----";
         child->dumpTree();
     }
 }
-

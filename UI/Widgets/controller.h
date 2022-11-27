@@ -39,6 +39,8 @@
 
 #include <QObject>
 #include "mainwindow.h"
+#include "garmingpxfile.h"
+#include "gpxtablemodel.h"
 
 class Controller : public QObject
 {
@@ -54,4 +56,8 @@ public slots:
 
 private:
     MainWindow m_window;
+    GarminGpxFile m_gpxFile{}; // Current GPX file shown in table views
+    GpxTableModel m_trks{ tr("Tracks") }; // Table view for tracks
+    GpxTableModel m_rtes{ tr("Routes") }; // Table view for routes
+    GpxTableModel m_wpts{ tr("Waypoints") }; // Table view for waypoints (POIs)
 };

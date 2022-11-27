@@ -35,8 +35,7 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
 **
 ****************************************************************************/
-#ifndef GARMINTREENODE_H
-#define GARMINTREENODE_H
+#pragma once
 
 #include <QString>
 #include <vector>
@@ -54,8 +53,7 @@ using std::weak_ptr;
 class GarminTreeNode : std::enable_shared_from_this<GarminTreeNode>
 {
 public:
-    explicit GarminTreeNode(const QString& name,
-                            const QString& fullPath,
+    explicit GarminTreeNode(const QString &name, const QString &fullPath,
                             shared_ptr<GarminTreeNode> parent = nullptr);
 
     // ----- Manaage the children of a node ----
@@ -74,6 +72,7 @@ public:
     int row() const;
 
     // ----- Debug ----
+    void extracted() const;
     void dumpTree() const;
 
 private:
@@ -82,5 +81,3 @@ private:
     weak_ptr<GarminTreeNode> m_parent;
     vector<shared_ptr<GarminTreeNode>> m_children;
 };
-
-#endif // GARMINTREENODE_H

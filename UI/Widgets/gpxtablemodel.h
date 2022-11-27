@@ -35,35 +35,42 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
 **
 ****************************************************************************/
-#include <QFileDialog>
-#include <QStandardpaths>
-#include "controller.h"
-#include "./ui_mainwindow.h"
+#pragma once
 
-Controller::Controller()
+#include <QAbstractTableModel>
+
+class GpxTableModel : public QAbstractTableModel
 {
-    connect(m_window.getUi()->exitButton, &QPushButton::clicked, &QCoreApplication::exit);
-    connect(m_window.getUi()->openGpxButton, &QPushButton::clicked, this, &Controller::openGpxFile);
-    m_window.getUi()->trkListView->setModel(&m_trks);
-    m_window.getUi()->rteListView->setModel(&m_rtes);
-    m_window.getUi()->wptListView->setModel(&m_wpts);
-    m_window.show();
-}
+    Q_OBJECT
 
-void Controller::loadGarminDirs() { }
+public:
+    explicit GpxTableModel(const QString header, QObject *parent = nullptr);
 
-void Controller::openGpxFile()
-{
-    QStringList lst = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);
-    QString filename =
-            QFileDialog::getOpenFileName(nullptr, QFileDialog::tr("Open GPX file"), lst.front(),
-                                         QFileDialog::tr("GPX (*.gpx *.GPX)"));
+    // Header:
+    QVariant headerData(int section, Qt::Orientation orientation,
+                        int role = Qt::DisplayRole) const override;
 
-    m_gpxFile.reset();
-    m_gpxFile.parse(filename);
-    m_trks.upDateModel(m_gpxFile.trkList());
-    m_wpts.upDateModel(m_gpxFile.wptList());
-    m_rtes.upDateModel(m_gpxFile.rteList());
-}
+    // Basic functionality:
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
-void Controller::deleteGpxFile() { }
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+
+    // Editable:
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
+
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
+
+    // Add data:
+    bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
+
+    // Remove data:
+    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
+
+    // Update Model when model data change
+    void upDateModel(const QStringList &newItems);
+
+private:
+    QStringList m_items;
+    QString m_header;
+};

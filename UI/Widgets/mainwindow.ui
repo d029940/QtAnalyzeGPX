@@ -21,9 +21,30 @@
        <enum>Qt::Horizontal</enum>
       </property>
       <widget class="QTreeView" name="dirTreeView"/>
-      <widget class="QTableView" name="trkListView"/>
-      <widget class="QTableView" name="wptListView"/>
-      <widget class="QTableView" name="rteListView"/>
+      <widget class="QTableView" name="trkListView">
+       <attribute name="horizontalHeaderStretchLastSection">
+        <bool>true</bool>
+       </attribute>
+       <attribute name="verticalHeaderVisible">
+        <bool>false</bool>
+       </attribute>
+      </widget>
+      <widget class="QTableView" name="wptListView">
+       <attribute name="horizontalHeaderStretchLastSection">
+        <bool>true</bool>
+       </attribute>
+       <attribute name="verticalHeaderVisible">
+        <bool>false</bool>
+       </attribute>
+      </widget>
+      <widget class="QTableView" name="rteListView">
+       <attribute name="horizontalHeaderStretchLastSection">
+        <bool>true</bool>
+       </attribute>
+       <attribute name="verticalHeaderVisible">
+        <bool>false</bool>
+       </attribute>
+      </widget>
      </widget>
     </item>
     <item>

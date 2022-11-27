@@ -39,8 +39,9 @@
 
 #include <QObject>
 #include <QStringList>
-#include <QFile>
-#include <QDomDocument>
+
+// Referenced classes
+class QDomElement;
 
 ///
 /// \class GarminGpxFile
@@ -54,14 +55,16 @@ public:
 
     ///
     /// \brief Parses Garmin GPX file for routes, tracks and waypoints
-    /// \param file - an existing local file with gpx/GPX extension
+    /// \param file - an existing local filename with gpx/GPX extension
     ///
-    void parse(QFile &file);
+    void parse(QString filename);
 
     // Manipulate routes, tracks, waypoints lists
     void appendRoute(const QString &route);
     void appendTrack(const QString &track);
     void appendWaypoint(const QString &waypoint);
+
+    void reset();
 
     // Getters and setters for tracks, routes and waypoints
     QStringList trkList() const;

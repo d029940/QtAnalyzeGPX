@@ -37,14 +37,17 @@
 ****************************************************************************/
 #include <memory>
 #include <QDebug>
+#include <QDomDocument>
+#include <QFile>
 
 #include "garmingpxfile.h"
 
 GarminGpxFile::GarminGpxFile() { }
 
 // NOTE: https://doc-snapshots.qt.io/qt6-6.4/xml-changes-qt6.html
-void GarminGpxFile::parse(QFile &file)
+void GarminGpxFile::parse(QString filename)
 {
+    QFile file{ filename };
     QDomDocument gpxFileDOM;
 
     // Load the fike
@@ -87,6 +90,13 @@ void GarminGpxFile::appendTrack(const QString &track)
 void GarminGpxFile::appendWaypoint(const QString &waypoint)
 {
     m_wptList.append(waypoint);
+}
+
+void GarminGpxFile::reset()
+{
+    m_rteList.clear();
+    m_trkList.clear();
+    m_wptList.clear();
 }
 
 // ----- Getters and setters  -----
