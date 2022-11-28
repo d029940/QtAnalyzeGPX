@@ -67,6 +67,7 @@ public:
     // Remove data:
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
 
+public slots:
     // Update Model when model data change
     void upDateModel(const QStringList &newItems);
 

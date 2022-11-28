@@ -54,7 +54,13 @@ public slots:
     void loadGarminDirs();
     void openGpxFile();
     void deleteGpxFile();
+    void gpxFileSelected(const QItemSelection &selected, const QItemSelection &deselected);
     void showAboutDialog();
+
+signals:
+    void onTrkModelChanged(const QStringList &newItems);
+    void onRteModelChanged(const QStringList &newItems);
+    void onWptModelChanged(const QStringList &newItems);
 
 private:
     MainWindow m_window;

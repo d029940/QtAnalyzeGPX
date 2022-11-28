@@ -63,6 +63,11 @@ QPushButton *MainWindow::loadGpxButton() const
     return ui->loadGpxButton;
 }
 
+QPushButton *MainWindow::deleteGpxButton() const
+{
+    return ui->deleteGpxButton;
+}
+
 QAction *MainWindow::actionAbout() const
 {
     return ui->actionAbout;

@@ -60,6 +60,7 @@ public:
     QPushButton *exitButton() const;
     QPushButton *openGpxButton() const;
     QPushButton *loadGpxButton() const;
+    QPushButton *deleteGpxButton() const;
     QAction *actionAbout() const;
     QTableView *trkListView() const;
     QTableView *rteListView() const;
