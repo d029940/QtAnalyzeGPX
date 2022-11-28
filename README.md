@@ -12,3 +12,4 @@ Next to the right ("GPX Content"), the content of a GPX file is shown in three p
 - The "Open GPX file" button lets you locate and open a specific GPX file in the file system and shows it in the "GPX Content".
 - The "Load Garmin devices" looks for attached devices/volumes for a folder "/Garmin/GPX" and lists all gpx files found in "GPX files list".
 - Clicking on a GPX file in the "GPX files list" will show the content of the GPX file in the "GPX Content" view.
+- The delete button deletes a GPX file currently selected in the "GPX files list".

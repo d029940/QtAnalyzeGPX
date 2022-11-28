@@ -35,14 +35,18 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
 **
 ****************************************************************************/
+#include <QLibraryInfo>
 #include "aboutdialog.h"
 #include "ui_aboutdialog.h"
 
-ABoutDialog::ABoutDialog(QWidget *parent) :
-      QDialog(parent),
-      ui(new Ui::ABoutDialog)
+ABoutDialog::ABoutDialog(QWidget *parent) : QDialog(parent), ui(new Ui::ABoutDialog)
 {
     ui->setupUi(this);
+    QString qtVer = QLibraryInfo::version().toString();
+    ui->aboutText->setTextFormat(Qt::RichText);
+    ui->aboutText->setOpenExternalLinks(true);
+    // TODO: Include Licence text
+    ui->aboutText->setText("Qt version: " + qtVer + "<br> <a href=https://www.qt.io>www.qt.io</a>");
 }
 
 ABoutDialog::~ABoutDialog()

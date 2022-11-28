@@ -20,7 +20,7 @@
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QTextBrowser" name="textBrowser"/>
+      <widget class="QLabel" name="aboutText"/>
      </item>
      <item>
       <widget class="QDialogButtonBox" name="buttonBox">
