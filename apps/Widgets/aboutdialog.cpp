@@ -35,20 +35,17 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
 **
 ****************************************************************************/
-#include "mainwindow.h"
-#include "./ui_mainwindow.h"
+#include "aboutdialog.h"
+#include "ui_aboutdialog.h"
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
+ABoutDialog::ABoutDialog(QWidget *parent) :
+      QDialog(parent),
+      ui(new Ui::ABoutDialog)
 {
     ui->setupUi(this);
 }
 
-MainWindow::~MainWindow()
+ABoutDialog::~ABoutDialog()
 {
     delete ui;
-}
-
-Ui::MainWindow *MainWindow::getUi() const
-{
-    return ui;
 }

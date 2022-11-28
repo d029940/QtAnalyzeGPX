@@ -37,20 +37,32 @@
 ****************************************************************************/
 #include <QFileDialog>
 #include <QStandardpaths>
+#include <QCoreApplication>
 #include "controller.h"
-#include "./ui_mainwindow.h"
+#include "aboutdialog.h"
 
 Controller::Controller()
 {
-    connect(m_window.getUi()->exitButton, &QPushButton::clicked, &QCoreApplication::exit);
-    connect(m_window.getUi()->openGpxButton, &QPushButton::clicked, this, &Controller::openGpxFile);
-    m_window.getUi()->trkListView->setModel(&m_trks);
-    m_window.getUi()->rteListView->setModel(&m_rtes);
-    m_window.getUi()->wptListView->setModel(&m_wpts);
+    // Connect all actions of main window
+    connect(m_window.exitButton(), &QPushButton::clicked, &QCoreApplication::exit);
+    connect(m_window.openGpxButton(), &QPushButton::clicked, this, &Controller::openGpxFile);
+    connect(m_window.loadGpxButton(), &QPushButton::clicked, this, &Controller::loadGarminDirs);
+
+    connect(m_window.actionAbout(), &QAction::triggered, this, &Controller::showAboutDialog);
+
+    // connect models to table views
+    m_window.trkListView()->setModel(&m_trks);
+    m_window.rteListView()->setModel(&m_rtes);
+    m_window.wptListView()->setModel(&m_wpts);
+    m_window.devicesTreeView()->setModel(&m_drives);
+
     m_window.show();
 }
 
-void Controller::loadGarminDirs() { }
+void Controller::loadGarminDirs()
+{
+    m_drives.loadGarminDevices();
+}
 
 void Controller::openGpxFile()
 {
@@ -67,3 +79,9 @@ void Controller::openGpxFile()
 }
 
 void Controller::deleteGpxFile() { }
+
+void Controller::showAboutDialog()
+{
+    ABoutDialog dlg{};
+    dlg.exec();
+}

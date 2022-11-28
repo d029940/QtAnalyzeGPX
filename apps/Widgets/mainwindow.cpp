@@ -35,29 +35,55 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
 **
 ****************************************************************************/
-#pragma once
-
-#include <QObject>
 #include "mainwindow.h"
-#include "garmingpxfile.h"
-#include "gpxtablemodel.h"
+#include "./ui_mainwindow.h"
 
-class Controller : public QObject
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
-    Q_OBJECT
+    ui->setupUi(this);
+}
 
-public:
-    Controller();
+MainWindow::~MainWindow()
+{
+    delete ui;
+}
 
-public slots:
-    void loadGarminDirs();
-    void openGpxFile();
-    void deleteGpxFile();
+QPushButton *MainWindow::exitButton() const
+{
+    return ui->exitButton;
+}
 
-private:
-    MainWindow m_window;
-    GarminGpxFile m_gpxFile{}; // Current GPX file shown in table views
-    GpxTableModel m_trks{ tr("Tracks") }; // Table view for tracks
-    GpxTableModel m_rtes{ tr("Routes") }; // Table view for routes
-    GpxTableModel m_wpts{ tr("Waypoints") }; // Table view for waypoints (POIs)
-};
+QPushButton *MainWindow::openGpxButton() const
+{
+    return ui->openGpxButton;
+}
+
+QPushButton *MainWindow::loadGpxButton() const
+{
+    return ui->loadGpxButton;
+}
+
+QAction *MainWindow::actionAbout() const
+{
+    return ui->actionAbout;
+}
+
+QTableView *MainWindow::trkListView() const
+{
+    return ui->trkListView;
+}
+
+QTableView *MainWindow::rteListView() const
+{
+    return ui->rteListView;
+}
+
+QTableView *MainWindow::wptListView() const
+{
+    return ui->wptListView;
+}
+
+QTreeView *MainWindow::devicesTreeView() const
+{
+    return ui->dirTreeView;
+}

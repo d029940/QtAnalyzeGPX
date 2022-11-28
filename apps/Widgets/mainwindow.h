@@ -38,6 +38,9 @@
 #pragma once
 
 #include <QMainWindow>
+#include <QPushButton>
+#include <QTableView>
+#include <QTreeView>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -53,7 +56,15 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    Ui::MainWindow *getUi() const;
+    // Access to controls of UI
+    QPushButton *exitButton() const;
+    QPushButton *openGpxButton() const;
+    QPushButton *loadGpxButton() const;
+    QAction *actionAbout() const;
+    QTableView *trkListView() const;
+    QTableView *rteListView() const;
+    QTableView *wptListView() const;
+    QTreeView *devicesTreeView() const;
 
 private:
     Ui::MainWindow *ui;

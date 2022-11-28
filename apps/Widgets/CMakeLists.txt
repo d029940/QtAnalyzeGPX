@@ -16,10 +16,15 @@ set(PROJECT_SOURCES
         mainwindow.cpp
         mainwindow.h
         mainwindow.ui
-        controller.h
-        controller.cpp
-        gpxtablemodel.h
-        gpxtablemodel.cpp
+        vm/controller.h
+        vm/controller.cpp
+        vm/gpxtablemodel.h
+        vm/gpxtablemodel.cpp
+        vm/garmintreemodel.h
+        vm/garmintreemodel.cpp
+        aboutdialog.h
+        aboutdialog.cpp
+        aboutdialog.ui
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -45,7 +50,7 @@ else()
     endif()
 endif()
 
-#target_include_directories(${EXECUTABLE_NAME} include)
+target_include_directories(${EXECUTABLE_NAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/vm" include)
 
 #target_link_directories(${EXECUTABLE_NAME} PUBLIC ${PROJECT_BINARY_DIR})
 target_link_directories(${EXECUTABLE_NAME} PRIVATE ${PROJECT_BINARY_DIR})
