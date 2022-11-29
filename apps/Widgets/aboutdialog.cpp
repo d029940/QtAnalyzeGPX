@@ -46,7 +46,7 @@ ABoutDialog::ABoutDialog(QWidget *parent) : QDialog(parent), ui(new Ui::ABoutDia
     QString qtVer{ "Qt version: " + QLibraryInfo::version().toString()
                    + "a <a href=https://www.qt.io>www.qt.io</a>" };
     QString appVer{
-        "AnalyzeGPX Version " + QString::number(AnalyzeGPX_Widgets_VERSION_MINOR) + "."
+        "AnalyzeGPX Version " + QString::number(AnalyzeGPX_Widgets_VERSION_MAJOR) + "."
                 + QString::number(AnalyzeGPX_Widgets_VERSION_MINOR),
     };
 

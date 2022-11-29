@@ -85,16 +85,7 @@ void Controller::openGpxFile()
             QFileDialog::getOpenFileName(nullptr, QFileDialog::tr("Open GPX file"), lst.front(),
                                          QFileDialog::tr("GPX (*.gpx *.GPX)"));
 
-    m_gpxFile.reset();
-    m_gpxFile.parse(filename);
-    // either use signal and slot to update the tableviews (bindings)
-    emit onTrkModelChanged(m_gpxFile.trkList());
-    emit onWptModelChanged(m_gpxFile.wptList());
-    emit onRteModelChanged(m_gpxFile.rteList());
-    // or update the tableviews directly
-    //    m_trks.upDateModel(m_gpxFile.trkList());
-    //    m_wpts.upDateModel(m_gpxFile.wptList());
-    //    m_rtes.upDateModel(m_gpxFile.rteList());
+    newGpxFileModelsUpdate(filename);
 }
 
 void Controller::deleteGpxFile()
@@ -105,7 +96,6 @@ void Controller::deleteGpxFile()
         return;
 
     auto gpxFile = static_cast<GarminTreeNode *>(indices.front().internalPointer());
-    qDebug() << "Selected gpx file: " << gpxFile->fullPath();
     QFile::remove(gpxFile->fullPath());
     loadGarminDirs();
 }
@@ -115,11 +105,15 @@ void Controller::gpxFileSelected(const QItemSelection &selected, const QItemSele
     if (selected.indexes().isEmpty())
         m_window.deleteGpxButton()->setDisabled(true);
     else {
-        auto node = static_cast<GarminTreeNode *>(selected.indexes().front().internalPointer());
-        if (node->childCount() == 0)
+        auto gpxFile = static_cast<GarminTreeNode *>(selected.indexes().front().internalPointer());
+        if (gpxFile->childCount() == 0) {
+            // Existing GPX file selected
             m_window.deleteGpxButton()->setDisabled(false);
-        else
+            newGpxFileModelsUpdate(gpxFile->fullPath());
+
+        } else {
             m_window.deleteGpxButton()->setDisabled(true);
+        }
     }
 }
 
@@ -127,4 +121,18 @@ void Controller::showAboutDialog()
 {
     ABoutDialog dlg{};
     dlg.exec();
+}
+
+void Controller::newGpxFileModelsUpdate(const QString filename)
+{
+    m_gpxFile.reset();
+    m_gpxFile.parse(filename);
+    // either use signal and slot to update the tableviews (bindings)
+    emit onTrkModelChanged(m_gpxFile.trkList());
+    emit onWptModelChanged(m_gpxFile.wptList());
+    emit onRteModelChanged(m_gpxFile.rteList());
+    // or update the tableviews directly
+    //    m_trks.upDateModel(m_gpxFile.trkList());
+    //    m_wpts.upDateModel(m_gpxFile.wptList());
+    //    m_rtes.upDateModel(m_gpxFile.rteList());
 }

@@ -27,3 +27,4 @@ add_subdirectory(models)
 # Resources
 set(RESOURCE_DIR "")
 add_subdirectory(resources)
+

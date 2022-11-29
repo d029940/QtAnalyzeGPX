@@ -36,16 +36,10 @@
 **
 ****************************************************************************/
 #include <QApplication>
-#include <iostream>
-
-#include "AnalyzeGPX_Widgets_config.h"
 #include "controller.h"
 
 int main(int argc, char *argv[])
 {
-    std::cout << argv[0] << " Version " << AnalyzeGPX_Widgets_VERSION_MINOR << "."
-              << AnalyzeGPX_Widgets_VERSION_MINOR << std::endl;
-
     QApplication a(argc, argv);
 
     Controller mv{};

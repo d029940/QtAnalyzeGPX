@@ -52,7 +52,10 @@
       <item>
        <widget class="QPushButton" name="loadGpxButton">
         <property name="text">
-         <string>L&amp;oad Garmin Devices</string>
+         <string>&amp;Load Garmin Devices</string>
+        </property>
+        <property name="shortcut">
+         <string>Alt+L</string>
         </property>
        </widget>
       </item>
@@ -60,6 +63,9 @@
        <widget class="QPushButton" name="openGpxButton">
         <property name="text">
          <string>&amp;Open GPX file</string>
+        </property>
+        <property name="shortcut">
+         <string>Alt+O</string>
         </property>
        </widget>
       </item>
@@ -81,6 +87,9 @@
         <property name="text">
          <string>E&amp;xit</string>
         </property>
+        <property name="shortcut">
+         <string>Alt+X</string>
+        </property>
        </widget>
       </item>
      </layout>
@@ -93,7 +102,7 @@
      <x>0</x>
      <y>0</y>
      <width>1048</width>
-     <height>24</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp">
