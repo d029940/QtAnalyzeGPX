@@ -27,11 +27,30 @@ set(PROJECT_SOURCES
         aboutdialog.ui
 )
 
+
+# MacOS app icon
+set(MACOSX_BUNDLE_ICON_FILE appicon.icns)
+message("AppIcon: " ${APP_RESOUCRE_DIR})
+set(app_icon_macos "${APP_RESOUCRE_DIR}/icons/appicon.icns")
+set_source_files_properties(${app_icon_macos} PROPERTIES
+           MACOSX_PACKAGE_LOCATION "Resources")
+
+# Define executable
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
+  if (APPLE)
     qt_add_executable(${EXECUTABLE_NAME}
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+        ${app_icon_macos}
     )
+  else()
+#   Windows needs a resource file for the app icon
+#   https://doc-snapshots.qt.io/qt6-6.4/appicon.html
+    qt_add_executable(${EXECUTABLE_NAME}
+        MANUAL_FINALIZATION
+        ${PROJECT_SOURCES}
+      )
+  endif()
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET ${EXECUTABLE_NAME} APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
 #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
@@ -67,8 +86,19 @@ set_target_properties(${EXECUTABLE_NAME} PROPERTIES
 
 install(TARGETS ${EXECUTABLE_NAME}
     BUNDLE DESTINATION .
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(${EXECUTABLE_NAME})
 endif()
+
+
+qt_generate_deploy_app_script(
+    TARGET  ${EXECUTABLE_NAME}
+    FILENAME_VARIABLE deploy_script
+    NO_UNSUPPORTED_PLATFORM_ERROR
+)
+install(SCRIPT ${deploy_script})
+
+# call "cmake --install ." in <build_dir>

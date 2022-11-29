@@ -1,0 +1,4 @@
+-	Icons (MacOS done)
+-	Resources
+-	Deployment / Installer (MacOs done)
+-	Translation
