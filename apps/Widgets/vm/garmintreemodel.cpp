@@ -42,7 +42,7 @@
 
 using namespace std;
 
-GarminTreeModel::GarminTreeModel(const QString header, QObject *parent)
+GarminTreeModel::GarminTreeModel(const QString &header, QObject *parent)
     : m_header(header), QAbstractItemModel(parent)
 {
     m_root = make_unique<GarminTreeNode>(tr("name"), "/");

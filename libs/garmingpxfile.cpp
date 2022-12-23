@@ -45,7 +45,7 @@
 GarminGpxFile::GarminGpxFile() { }
 
 // NOTE: https://doc-snapshots.qt.io/qt6-6.4/xml-changes-qt6.html
-void GarminGpxFile::parse(QString filename)
+void GarminGpxFile::parse(const QString &filename)
 {
     QFile file{ filename };
     QDomDocument gpxFileDOM;

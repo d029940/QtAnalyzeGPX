@@ -57,7 +57,7 @@ public:
     /// \brief Parses Garmin GPX file for routes, tracks and waypoints
     /// \param file - an existing local filename with gpx/GPX extension
     ///
-    void parse(QString filename);
+    void parse(const QString &filename);
 
     // Manipulate routes, tracks, waypoints lists
     void appendRoute(const QString &route);

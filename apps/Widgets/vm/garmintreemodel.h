@@ -45,7 +45,7 @@ class GarminTreeModel : public QAbstractItemModel
     Q_OBJECT
 
 public:
-    explicit GarminTreeModel(const QString header, QObject *parent = nullptr);
+    explicit GarminTreeModel(const QString &header, QObject *parent = nullptr);
 
     enum DirRoles { NameRole = Qt::UserRole + 1, FullPathRole };
     Q_ENUM(DirRoles)

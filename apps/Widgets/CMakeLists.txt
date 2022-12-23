@@ -30,7 +30,7 @@ set(PROJECT_SOURCES
 
 # MacOS app icon
 set(MACOSX_BUNDLE_ICON_FILE appicon.icns)
-message("AppIcon: " ${APP_RESOUCRE_DIR})
+print(APP_RESOUCRE_DIR)
 set(app_icon_macos "${APP_RESOUCRE_DIR}/icons/appicon.icns")
 set_source_files_properties(${app_icon_macos} PROPERTIES
            MACOSX_PACKAGE_LOCATION "Resources")
@@ -87,7 +87,8 @@ set_target_properties(${EXECUTABLE_NAME} PROPERTIES
 install(TARGETS ${EXECUTABLE_NAME}
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+    RUNTIME DESTINATION "C:/PortableApps/QtAnalyzeGPX")
+#    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(${EXECUTABLE_NAME})
@@ -101,4 +102,6 @@ qt_generate_deploy_app_script(
 )
 install(SCRIPT ${deploy_script})
 
-# call "cmake --install ." in <build_dir>
+# Create bundle on the Mac
+# 1. cd into build directory
+# 2. run "cmake --install ."

@@ -35,10 +35,12 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
 **
 ****************************************************************************/
-#include <QFileDialog>
-#include <QStandardpaths>
-#include <QCoreApplication>
 #include "controller.h"
+
+#include <QCoreApplication>
+#include <QFileDialog>
+#include <QStandardPaths>
+
 #include "aboutdialog.h"
 
 Controller::Controller()
@@ -49,7 +51,8 @@ Controller::Controller()
     m_window.wptListView()->setModel(&m_wpts);
     m_window.devicesTreeView()->setModel(&m_drives);
 
-    // setup selection in table / tree views (Attention: models have to be assigned before)
+    // setup selection in table / tree views (Attention: models have to be
+    // assigned before)
     connect(m_window.devicesTreeView()->selectionModel(), &QItemSelectionModel::selectionChanged,
             this, &Controller::gpxFileSelected);
 
@@ -76,6 +79,13 @@ void Controller::loadGarminDirs()
     emit onTrkModelChanged(m_gpxFile.trkList());
     emit onWptModelChanged(m_gpxFile.wptList());
     emit onRteModelChanged(m_gpxFile.rteList());
+
+    // expand garmin device tree
+    QTreeView *deviceTree = m_window.devicesTreeView();
+    deviceTree->setExpandsOnDoubleClick(true);
+    if (deviceTree->itemsExpandable()) {
+        deviceTree->expandToDepth(2);
+    }
 }
 
 void Controller::openGpxFile()
@@ -90,7 +100,6 @@ void Controller::openGpxFile()
 
 void Controller::deleteGpxFile()
 {
-
     QModelIndexList indices = m_window.devicesTreeView()->selectionModel()->selectedIndexes();
     if (indices.isEmpty())
         return;
@@ -123,7 +132,7 @@ void Controller::showAboutDialog()
     dlg.exec();
 }
 
-void Controller::newGpxFileModelsUpdate(const QString filename)
+void Controller::newGpxFileModelsUpdate(const QString &filename)
 {
     m_gpxFile.reset();
     m_gpxFile.parse(filename);

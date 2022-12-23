@@ -44,7 +44,7 @@ class GpxTableModel : public QAbstractTableModel
     Q_OBJECT
 
 public:
-    explicit GpxTableModel(const QString header, QObject *parent = nullptr);
+    explicit GpxTableModel(const QString &header, QObject *parent = nullptr);
 
     // Header:
     QVariant headerData(int section, Qt::Orientation orientation,

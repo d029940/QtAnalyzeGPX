@@ -70,6 +70,5 @@ private:
     GpxTableModel m_wpts{ tr("Waypoints") }; // Table view for waypoints (POIs)
     GarminTreeModel m_drives{ tr("Drives") }; // Drives recognized by Garmin gps
 
-    void newGpxFileModelsUpdate(
-            const QString filename); // updates m_trks, m_rtes, m_wpts when new GPX file is loaded
+    void newGpxFileModelsUpdate(const QString &filename); // updates m_trks, m_rtes, m_wpts when new GPX file is loaded
 };
