@@ -27,18 +27,26 @@ set(PROJECT_SOURCES
         aboutdialog.ui
 )
 
-
 print(APP_RESOUCRE_DIR)
-# MacOS app icon
-set(MACOSX_BUNDLE_ICON_FILE appicon.icns)
-set(app_icon_macos "${APP_RESOUCRE_DIR}/icons/appicon.icns")
-set_source_files_properties(${app_icon_macos} PROPERTIES
+if (APPLE)
+    # MacOS app icon
+    set(MACOSX_BUNDLE_ICON_FILE appicon.icns)
+    set(app_icon_macos "${APP_RESOUCRE_DIR}/icons/appicon.icns")
+    set_source_files_properties(${app_icon_macos} PROPERTIES
            MACOSX_PACKAGE_LOCATION "Resources")
+else(APPLE)
+    # Windows app icon
+    set(app_icon_win "${APP_RESOUCRE_DIR}/win.rc")
+    print(app_icon_win)
+endif(APPLE)
+
 
 # Licenses of the app
 set(licenses "${APP_RESOUCRE_DIR}/Licenses/01_License_BSD-4.txt")
-set_source_files_properties(${licenses} PROPERTIES
+if (APPLE)
+    set_source_files_properties(${licenses} PROPERTIES
            MACOSX_PACKAGE_LOCATION "Resources")
+endif(APPLE)
 
 
 # Define executable
@@ -56,6 +64,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(${EXECUTABLE_NAME}
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+        ${app_icon_win}
+        ${licenses}
       )
   endif()
 # Define target properties for Android with Qt 6 as:

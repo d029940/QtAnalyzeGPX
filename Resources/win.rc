@@ -1,0 +1,5 @@
+// App Icon
+// Attention: For any reason, if the Id is not called IDI_ICON1, it won't work. Why?
+
+IDI_ICON1 ICON "Icons/appicon.ico"
+
