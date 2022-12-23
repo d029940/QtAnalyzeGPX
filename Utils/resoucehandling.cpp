@@ -39,11 +39,6 @@
 
 #include <QCoreApplication>
 
-ResouceHandling::ResouceHandling()
-{
-
-}
-
 QString ResouceHandling::getResourcesPath()
 {
 #if defined(Q_OS_WIN)

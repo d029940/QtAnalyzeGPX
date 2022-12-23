@@ -41,16 +41,12 @@
 #include <QString>
 #include <memory>
 
-
 class Licenses
 {
 public:
-    Licenses();
+    Licenses() = delete;
 
     static QString readLicences();
-
-private:
-    std::unique_ptr<QString> m_licenceText;
 };
 
 #endif // LICENSES_H

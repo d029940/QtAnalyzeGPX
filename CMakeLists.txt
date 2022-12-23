@@ -9,10 +9,11 @@ set(CMAKE_INSTALL_PREFIX ${PROJECT_BINARY_DIR})
 
 set(EXECUTABLE_NAME ${PROJECT_NAME})
 
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+# Show QtCreator non build files
+add_custom_target(info SOURCES
+  README.md ToDo.txt)
 
+####################################################
 # Some helper functions
 
 # print all the arguments given
@@ -31,9 +32,20 @@ function(print)
 
 print_env(HOMEBREW_PREFIX)
 
+######################################################
+# build related commands
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 # Resources
 set(APP_RESOUCRE_DIR "${PROJECT_SOURCE_DIR}/resources")
 add_subdirectory(resources)
+
+# add general utilities
+set(LICENSES_LIB licenses)
+add_subdirectory(utils)
 
 # Garmin GPX Lib:
  set(GARMIN_LIB garmin)

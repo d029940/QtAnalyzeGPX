@@ -39,10 +39,12 @@
 #include "aboutdialog.h"
 #include "ui_aboutdialog.h"
 #include "AnalyzeGPX_Widgets_config.h"
+#include "licenses.h"
 
 ABoutDialog::ABoutDialog(QWidget *parent) : QDialog(parent), ui(new Ui::ABoutDialog)
 {
     ui->setupUi(this);
+
     QString qtVer{ "Qt version: " + QLibraryInfo::version().toString()
                    + "a <a href=https://www.qt.io>www.qt.io</a>" };
     QString appVer{
@@ -50,17 +52,20 @@ ABoutDialog::ABoutDialog(QWidget *parent) : QDialog(parent), ui(new Ui::ABoutDia
                 + QString::number(AnalyzeGPX_Widgets_VERSION_MINOR),
     };
 
+    // Get additional license test from license files
+    QString licensesFromFiles = Licenses::readLicences().replace('\n', "<br>");
+
     //    QVector<QString> aboutText{ "AnalyzeGPX Version ",
     QStringList aboutText{ appVer,
                            "<br>AnalyzeGPX is a free application for analyzing Contents of",
                            "Garmin GPX files",
                            "<br>License: BSD-4",
                            "<br>System Information",
-                           qtVer };
+                           qtVer,
+                           licensesFromFiles };
 
     ui->aboutText->setTextFormat(Qt::RichText);
     ui->aboutText->setOpenExternalLinks(true);
-    // TODO: Include Licence text
     ui->aboutText->setText(aboutText.join("<br>"));
 }
 

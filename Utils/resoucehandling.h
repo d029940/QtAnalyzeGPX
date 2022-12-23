@@ -40,11 +40,10 @@
 
 #include <QString>
 
-
 class ResouceHandling
 {
 public:
-    ResouceHandling();
+    ResouceHandling() = delete;
 
     static QString getResourcesPath();
 };

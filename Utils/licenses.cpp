@@ -38,11 +38,7 @@
 #include <QDir>
 #include <QDebug>
 #include "licenses.h"
-
-Licenses::Licenses()
-{
-    m_licenceText = std::make_unique<QString>();
-}
+#include "resoucehandling.h"
 
 QString Licenses::readLicences()
 {
@@ -63,10 +59,10 @@ QString Licenses::readLicences()
     // a) Distribute the license files in a platform native manner
     // b) Use Qt resource files system
 
-    // We use option b)
-    const QString resDir {"://Licenses"};
+    // We use option a)
+    const QString resDir{ ResouceHandling::getResourcesPath() };
     QDir licenseDir = QDir(resDir);
-    QStringList nameFilters({"*License*", "*Licence*"});
+    QStringList nameFilters({ "*License*", "*Licence*" });
     licenseDir.setNameFilters(nameFilters);
     licenseDir.setFilter(QDir::Files | QDir::NoDotAndDotDot);
     QStringList infoList = licenseDir.entryList();
@@ -74,7 +70,7 @@ QString Licenses::readLicences()
     QString licenseText;
 
     QFile licenseFile;
-    for (const QString& item : infoList) {
+    for (const QString &item : infoList) {
         licenseText += "\n";
         licenseFile.setFileName(resDir + "/" + item);
         licenseFile.open(QIODevice::ReadOnly | QIODevice::Text);

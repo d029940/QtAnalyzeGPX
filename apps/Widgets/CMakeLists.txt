@@ -28,12 +28,18 @@ set(PROJECT_SOURCES
 )
 
 
+print(APP_RESOUCRE_DIR)
 # MacOS app icon
 set(MACOSX_BUNDLE_ICON_FILE appicon.icns)
-print(APP_RESOUCRE_DIR)
 set(app_icon_macos "${APP_RESOUCRE_DIR}/icons/appicon.icns")
 set_source_files_properties(${app_icon_macos} PROPERTIES
            MACOSX_PACKAGE_LOCATION "Resources")
+
+# Licenses of the app
+set(licenses "${APP_RESOUCRE_DIR}/Licenses/01_License_BSD-4.txt")
+set_source_files_properties(${licenses} PROPERTIES
+           MACOSX_PACKAGE_LOCATION "Resources")
+
 
 # Define executable
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -42,6 +48,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         ${app_icon_macos}
+        ${licenses}
     )
   else()
 #   Windows needs a resource file for the app icon
@@ -71,10 +78,9 @@ endif()
 
 target_include_directories(${EXECUTABLE_NAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/vm" include)
 
-#target_link_directories(${EXECUTABLE_NAME} PUBLIC ${PROJECT_BINARY_DIR})
 target_link_directories(${EXECUTABLE_NAME} PRIVATE ${PROJECT_BINARY_DIR})
 
-target_link_libraries(${EXECUTABLE_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets model ${GARMIN_LIB})
+target_link_libraries(${EXECUTABLE_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets model ${GARMIN_LIB} ${LICENSES_LIB})
 
 set_target_properties(${EXECUTABLE_NAME} PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER analyze.manfredkern.com
