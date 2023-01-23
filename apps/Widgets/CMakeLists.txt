@@ -16,12 +16,12 @@ set(PROJECT_SOURCES
         mainwindow.cpp
         mainwindow.h
         mainwindow.ui
-        vm/controller.h
-        vm/controller.cpp
-        vm/gpxtablemodel.h
-        vm/gpxtablemodel.cpp
-        vm/garmintreemodel.h
-        vm/garmintreemodel.cpp
+        controllers/controller.h
+        controllers/controller.cpp
+        controllers/gpxtablemodel.h
+        controllers/gpxtablemodel.cpp
+        controllers/garmintreemodel.h
+        controllers/garmintreemodel.cpp
         aboutdialog.h
         aboutdialog.cpp
         aboutdialog.ui
@@ -52,7 +52,7 @@ endif(APPLE)
 # Define executable
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
   if (APPLE)
-    qt_add_executable(${EXECUTABLE_NAME}
+    qt_add_executable(${PROJECT_NAME}
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         ${app_icon_macos}
@@ -61,7 +61,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
   else()
 #   Windows needs a resource file for the app icon
 #   https://doc-snapshots.qt.io/qt6-6.4/appicon.html
-    qt_add_executable(${EXECUTABLE_NAME}
+    qt_add_executable(${PROJECT_NAME}
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         ${app_icon_win}
@@ -69,30 +69,30 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
       )
   endif()
 # Define target properties for Android with Qt 6 as:
-#    set_property(TARGET ${EXECUTABLE_NAME} APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
+#    set_property(TARGET ${PROJECT_NAME} APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
 #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
 # For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
 else()
     if(ANDROID)
-        add_library(${EXECUTABLE_NAME} SHARED
+        add_library(${PROJECT_NAME} SHARED
             ${PROJECT_SOURCES}
         )
 # Define properties for Android with Qt 5 after find_package() calls as:
 #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
-        add_executable(${EXECUTABLE_NAME}
+        add_executable(${PROJECT_NAME}
             ${PROJECT_SOURCES}
         )
     endif()
 endif()
 
-target_include_directories(${EXECUTABLE_NAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/vm" include)
+target_include_directories(${PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/controllers" include)
 
-target_link_directories(${EXECUTABLE_NAME} PRIVATE ${PROJECT_BINARY_DIR})
+target_link_directories(${PROJECT_NAME} PRIVATE ${PROJECT_BINARY_DIR})
 
-target_link_libraries(${EXECUTABLE_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets model ${GARMIN_LIB} ${LICENSES_LIB})
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets model ${GARMIN_LIB} ${LICENSES_LIB})
 
-set_target_properties(${EXECUTABLE_NAME} PROPERTIES
+set_target_properties(${PROJECT_NAME} PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER analyze.manfredkern.com
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
@@ -100,19 +100,19 @@ set_target_properties(${EXECUTABLE_NAME} PROPERTIES
     WIN32_EXECUTABLE TRUE
 )
 
-install(TARGETS ${EXECUTABLE_NAME}
+install(TARGETS ${PROJECT_NAME}
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION "C:/PortableApps/QtAnalyzeGPX")
 #    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(${EXECUTABLE_NAME})
+    qt_finalize_executable(${PROJECT_NAME})
 endif()
 
 
 qt_generate_deploy_app_script(
-    TARGET  ${EXECUTABLE_NAME}
+    TARGET  ${PROJECT_NAME}
     FILENAME_VARIABLE deploy_script
     NO_UNSUPPORTED_PLATFORM_ERROR
 )

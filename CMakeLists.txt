@@ -7,8 +7,6 @@ project(AnalyzeGPX
 
 set(CMAKE_INSTALL_PREFIX ${PROJECT_BINARY_DIR})
 
-set(EXECUTABLE_NAME ${PROJECT_NAME})
-
 # Show QtCreator non build files
 add_custom_target(info SOURCES
   README.md ToDo.txt)
@@ -53,6 +51,9 @@ add_subdirectory(utils)
 
 # Gui - QtWidgets
 add_subdirectory(apps/Widgets)
+
+# Gui - QML
+add_subdirectory(apps/QML)
 
 # Sources for the the models
 add_subdirectory(models)
