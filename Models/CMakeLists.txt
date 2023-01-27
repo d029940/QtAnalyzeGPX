@@ -1,11 +1,15 @@
-set(SRC garmintreenode.cpp
-        "${CMAKE_CURRENT_SOURCE_DIR}/garmintreenode.h"
+# Here go the abstract item models
+
+find_package(Qt6 REQUIRED COMPONENTS Core)
+qt_standard_project_setup()
+
+
+add_library(model OBJECT
+  garmintreemodel.cpp
+  garmintreemodel.h
+  gpxtablemodel.cpp
+  gpxtablemodel.h
 )
 
-# Because of QDebug
-find_package(Qt6 REQUIRED COMPONENTS Core)
-
-add_library(model OBJECT ${SRC})
-target_link_libraries(model PRIVATE Qt6::Core)
+target_link_libraries(model PRIVATE garmin_drive_loc Qt6::Core)
 target_include_directories(model INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
-

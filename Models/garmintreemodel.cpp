@@ -118,7 +118,7 @@ QVariant GarminTreeModel::headerData(int section, Qt::Orientation orientation, i
 
 // ----- Private helpers -----
 
-bool GarminTreeModel::readGpxFilesInFolder(const shared_ptr<GarminTreeNode> vol)
+bool GarminTreeModel::readGpxFilesInFolder(const std::shared_ptr<GarminTreeNode> vol)
 {
     QDir gpxDir = QDir(vol->fullPath());
     gpxDir.setFilter(QDir::Files | QDir::NoDotDot | QDir::NoDot | QDir::NoSymLinks);

@@ -37,8 +37,9 @@
 ****************************************************************************/
 #pragma once
 
+#include <memory>
 #include <QAbstractItemModel>
-#include <garmintreenode.h>
+#include "garmintreenode.h"
 
 class GarminTreeModel : public QAbstractItemModel
 {
@@ -104,7 +105,7 @@ private:
     /// \param vol - GarminTreeNode with full path of a directory
     /// \return true if gpx file is found, otherwise false
     ///
-    bool readGpxFilesInFolder(const shared_ptr<GarminTreeNode> vol);
+    bool readGpxFilesInFolder(const std::shared_ptr<GarminTreeNode> vol);
 
     ///
     /// \brief points to the root of GarminTreeNodes

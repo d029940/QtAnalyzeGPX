@@ -18,10 +18,6 @@ set(PROJECT_SOURCES
         mainwindow.ui
         controllers/controller.h
         controllers/controller.cpp
-        controllers/gpxtablemodel.h
-        controllers/gpxtablemodel.cpp
-        controllers/garmintreemodel.h
-        controllers/garmintreemodel.cpp
         aboutdialog.h
         aboutdialog.cpp
         aboutdialog.ui
@@ -90,7 +86,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/
 
 target_link_directories(${PROJECT_NAME} PRIVATE ${PROJECT_BINARY_DIR})
 
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets model ${GARMIN_LIB} ${LICENSES_LIB})
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets model garmin_drive_loc garmin_gpx ${LICENSES_LIB})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER analyze.manfredkern.com

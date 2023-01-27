@@ -45,8 +45,7 @@ add_subdirectory(resources)
 set(LICENSES_LIB licenses)
 add_subdirectory(utils)
 
-# Garmin GPX Lib:
- set(GARMIN_LIB garmin)
+# Garmin GPX & Drive Location libs:
  add_subdirectory(libs)
 
 # Gui - QtWidgets
