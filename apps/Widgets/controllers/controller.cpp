@@ -100,6 +100,7 @@ void Controller::openGpxFile()
 
 void Controller::deleteGpxFile()
 {
+    // Get current selection is different in QMS and Widgets
     QModelIndexList indices = m_window.devicesTreeView()->selectionModel()->selectedIndexes();
     if (indices.isEmpty())
         return;

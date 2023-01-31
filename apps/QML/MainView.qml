@@ -1,12 +1,14 @@
-import QtQuick 2.0
-import QtQuick.Window 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.15
+import QtQuick
+import QtQuick.Window
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Dialogs
 
-Window {
+ApplicationWindow {
     id: root
     visible: true
     title: qsTr("Analyze GPX file")
+    color: "transparent"
 
     property int myMargin: 10
 
@@ -17,12 +19,15 @@ Window {
     minimumHeight: Math.max(mainLayout.Layout.minimumHeight + 2 * myMargin,
                             Screen.height * 0.4)
 
-    // Start out with all parts of the SplitView having the same width
     ColumnLayout {
         id: mainLayout
         anchors.fill: parent
         anchors.margins: myMargin
 
+        // Define useable with for direct elements in mainLayout
+        property double innerWidth: mainLayout.width - 2 * myMargin
+
+        // Start out with all parts of the SplitView having the same width
         SplitView {
             id: splitView
 
@@ -37,6 +42,16 @@ Window {
                 SplitView.preferredWidth: parent.width / 4 // TODO: change if loaded with data
                 SplitView.maximumWidth: parent.width * 0.8
                 color: "lightBlue"
+                TreeView {
+                    id: garminDrives
+                    anchors.fill: parent
+                    // TODO: enhance delegate and model
+                    delegate: Text {
+                        id: del
+                        text: qsTr("Drives")
+                    }
+                    model: _garminDrives
+                }
             }
 
             Rectangle {
@@ -92,52 +107,26 @@ Window {
             }
         }
 
+        // Buttons
         RowLayout {
             id: buttonRow
-            Layout.minimumHeight: debugButton.height
             Layout.alignment: Qt.AlignBottom
+            //Layout.preferredWidth: mainLayout.width
+            implicitWidth: mainLayout.width
 
-            property int numberOfButtons: 4
-
-            Button {
-                id: debugButton
-                width: parent.width / buttonRow.numberOfButtons
-
-                text: qsTr("Track Routes Waypts")
-                onClicked: console.log(root.width, root.minimumWidth)
-                //                onClicked: console.log("TrackView height", tracksView.height,
-                //                                       "TrackView contentHeight", tracksView.contentHeight,
-                //                                       "TrackView implcitHeight", tracksView.implicitHeight,
-                //                                       "TrackView width", tracksView.width,
-                //                                       "TrackView contentWidth", tracksView.contentWidth,
-                //                                       "TrackView implcitWidth", tracksView.implicitWidth,"\n",
-                //                                       "RoutesView height", routesView.height,
-                //                                       "RoutesView contentHeight", routesView.contentHeight,
-                //                                       "RoutesView implcitHeight", routesView.implicitHeight,"\n",
-                //                                       "RoutesView width", routesView.width,
-                //                                       "RoutesView contentWidth", routesView.contentWidth, "\n",
-                //                                       "WaypointsView height", waypointsView.height,
-                //                                       "WaypointsView contentHeight", waypointsView.contentHeight, "\n",
-                //                                       "WaypointsView width", waypointsView.width,
-                //                                       "WaypointsView contentWidth", waypointsView.contentWidth)
-            }
+            property double buttonWidth: mainLayout.innerWidth / 4
 
             Button {
-                id: debugSplitview
-                width: parent.width / buttonRow.numberOfButtons
+                id: loadGarminButton
+                Layout.preferredWidth: buttonRow.buttonWidth
 
-                text: qsTr("SplitView")
-                onClicked: console.log("splitView.contentHeight =",
-                                       splitView.contentHeight,
-                                       "splitView.height = ", splitView.height,
-                                       "\n", "splitView.contentWidth =",
-                                       splitView.contentWidth,
-                                       "splitView.width =", splitView.width)
+                text: qsTr("Load Garmin devices")
+                onClicked: console.log("Load Garmin devices")
             }
 
             Button {
                 id: deleteButton
-                width: parent.width / buttonRow.numberOfButtons
+                Layout.preferredWidth: buttonRow.buttonWidth
 
                 text: qsTr("Delete")
                 onClicked: console.log("debugButton.implicitHeight = ",
@@ -149,19 +138,27 @@ Window {
                                        "routesView.width =", routesView.width)
             }
 
-            //            Button {
-            //                id: openFile
-            //                width: parent.width / buttonRow.numberOfButtons
+            Button {
+                id: openFileButton
+                Layout.preferredWidth: buttonRow.buttonWidth
 
-            //                //            anchors.bottom: parent.bottom
-            //                //            anchors.left: parent.left
+                text: qsTr("Open File")
+                onClicked: fileDialog.open() // or call Controller.openDialog
+            }
 
-            //                text: qsTr("Open File")
-            //                onClicked: console.log("debugButton.implicitHeight = ", debugButton.implicitHeight, "\n",
-            //                                       "debugButton.height = ", debugButton.height, "\n",
-            //                                       "routesView.height =", routesView.height, "\n",
-            //                                       "routesView.width =", routesView.width,)
-            //            }
+            FileDialog {
+                id: fileDialog
+                nameFilters: [qsTr("GPX files (*.gpx *.GPX)")]
+                //                onAccepted:
+            }
+
+            Button {
+                id: exitButton
+                Layout.preferredWidth: buttonRow.buttonWidth
+
+                text: qsTr("Exit")
+                onClicked: Qt.quit()
+            }
         }
     }
 }

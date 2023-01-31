@@ -1,16 +1,24 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-// #include <QQmlContext>
+#include <QQmlContext>
+
+#include "garmintreemodel.h"
 
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
 
-    // TODO: Initiate garmintreemodel
+    // Create Models
+    GarminTreeModel garminDrives{ GarminTreeModel::tr("Drives") };
+    // TODO: gpx models tbd
 
     QQmlApplicationEngine engine;
-    //    QQmlContext *context = engine.rootContext();
-    //    context->setProperty();
+    QQmlContext *context = engine.rootContext();
+
+    // Connect models to views
+    // TODO: Can context be moved / refenced from the controller and connections are made in the
+    // controller?
+    context->setContextProperty("_garminDrives", &garminDrives);
 
     const QUrl url(u"qrc:/AnalyzeGPX/MainView.qml"_qs);
     QObject::connect(

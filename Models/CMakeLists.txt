@@ -11,5 +11,5 @@ add_library(model OBJECT
   gpxtablemodel.h
 )
 
-target_link_libraries(model PRIVATE garmin_drive_loc Qt6::Core)
+target_link_libraries(model PUBLIC garmin_drive_loc garmin_gpx Qt6::Core)
 target_include_directories(model INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})

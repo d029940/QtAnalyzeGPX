@@ -18,21 +18,21 @@ qt_add_qml_module(${PROJECT_NAME}
     URI AnalyzeGPX
     VERSION 1.0
     QML_FILES
-      main.qml
       MainView.qml
       RteTrkWptListView.qml
       ListHeader.qml
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
-    MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
+    MACOSX_BUNDLE_GUI_IDENTIFIER analyze.manfredkern.com
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
 )
 
-target_link_libraries(${PROJECT_NAME}
+target_link_libraries(${PROJECT_NAME} PRIVATE
+    model
     PRIVATE Qt6::Quick)
 
 install(TARGETS ${PROJECT_NAME}
