@@ -9,7 +9,7 @@ set(CMAKE_INSTALL_PREFIX ${PROJECT_BINARY_DIR})
 
 # Show QtCreator non build files
 add_custom_target(info SOURCES
-  README.md ToDo.txt)
+  README.md TODO.txt)
 
 ####################################################
 # Some helper functions

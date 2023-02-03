@@ -19,6 +19,12 @@ ApplicationWindow {
     minimumHeight: Math.max(mainLayout.Layout.minimumHeight + 2 * myMargin,
                             Screen.height * 0.4)
 
+    SystemPalette {
+        // colors for dark, light mode
+        id: activePalette
+        colorGroup: SystemPalette.Active
+    }
+
     ColumnLayout {
         id: mainLayout
         anchors.fill: parent
@@ -38,36 +44,42 @@ ApplicationWindow {
 
             Rectangle {
                 id: filesList
-                //                SplitView.fillWidth: true
+                SplitView.fillWidth: true
+                SplitView.fillHeight: true
                 SplitView.preferredWidth: parent.width / 4 // TODO: change if loaded with data
-                SplitView.maximumWidth: parent.width * 0.8
-                color: "lightBlue"
-                TreeView {
-                    id: garminDrives
+                SplitView.minimumWidth: tracksView.headerItem.implicitWidth + (2 * myMargin)
+
+                border.color: "black"
+                color: "transparent"
+
+                //                color: activePalette.base
+                DevicesTreeView {
+                    id: devicesView
+                    width: filesList.width
+
                     anchors.fill: parent
-                    // TODO: enhance delegate and model
-                    delegate: Text {
-                        id: del
-                        text: qsTr("Drives")
-                    }
-                    model: _garminDrives
+                    myModel: _garminDrives
+                    listHeaderText: qsTr("Drives")
+                    margin: myMargin
                 }
             }
 
             Rectangle {
                 id: tracksRect
 
-                height: tracksView.contentHeight
+                //                height: tracksView.contentHeight
                 SplitView.minimumWidth: tracksView.headerItem.implicitWidth + (2 * myMargin)
                 SplitView.preferredWidth: parent.width / 4
-                //                SplitView.preferredWidth: tracksView.implicitWidth
+
                 border.color: "black"
+                //                color: activePalette.base
+                color: "transparent"
 
                 RteTrkWptListView {
                     id: tracksView
                     listHeaderText: qsTr("Tracks")
                     roleDisplay: "Tracks"
-                    myModel: 4
+                    myModel: _tracks
                 }
             }
 
@@ -77,14 +89,15 @@ ApplicationWindow {
                 height: routesView.contentHeight
                 SplitView.minimumWidth: routesView.headerItem.implicitWidth + (2 * myMargin)
                 SplitView.preferredWidth: parent.width / 4
-                //                SplitView.preferredWidth: routesView.implicitWidth
+
                 border.color: "black"
+                color: "transparent"
 
                 RteTrkWptListView {
                     id: routesView
                     listHeaderText: qsTr("Routes")
                     roleDisplay: "Routes"
-                    myModel: 4
+                    myModel: _routes
                 }
             }
 
@@ -95,14 +108,14 @@ ApplicationWindow {
                 SplitView.minimumWidth: waypointsView.headerItem.implicitWidth + (2 * myMargin)
                 SplitView.preferredWidth: parent.width / 4
 
-                //                SplitView.preferredWidth: waypointsView.implicitWidth
                 border.color: "black"
+                color: "transparent"
 
                 RteTrkWptListView {
                     id: waypointsView
                     listHeaderText: qsTr("Waypoints")
                     roleDisplay: "Waypoints"
-                    myModel: 4
+                    myModel: _waypoints
                 }
             }
         }
@@ -121,7 +134,7 @@ ApplicationWindow {
                 Layout.preferredWidth: buttonRow.buttonWidth
 
                 text: qsTr("Load Garmin devices")
-                onClicked: console.log("Load Garmin devices")
+                onClicked: _controller.loadGarminDirs()
             }
 
             Button {
@@ -149,7 +162,8 @@ ApplicationWindow {
             FileDialog {
                 id: fileDialog
                 nameFilters: [qsTr("GPX files (*.gpx *.GPX)")]
-                //                onAccepted:
+                fileMode: fileDialog.OpenFile
+                onAccepted: _controller.openGpxFile(fileDialog.selectedFile)
             }
 
             Button {

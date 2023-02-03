@@ -1,16 +1,39 @@
-import QtQuick 2.0
-import QtQuick.Controls 2.12
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
-Rectangle {
+Item {
+    id: root
     property alias name: myText.text
     width: parent.width
     implicitWidth: myText.implicitWidth
-    implicitHeight: myText.implicitHeight
-    //color: "white"
-    Label {
-        id: myText
-        color: "red"
-        bottomPadding: 10
+    implicitHeight: col.implicitHeight
+
+    property int mySpacing: 10
+
+    SystemPalette {
+        id: activePalette
+        colorGroup: SystemPalette.Active
+    }
+
+    Rectangle {
+        height: myText.implicitHeight
+        width: root.width
+        color: activePalette.base
+        ColumnLayout {
+            id: col
+
+            //        spacing: mySpacing
+            Label {
+                color: activePalette.text
+                id: myText
+                text: name
+            }
+
+            Rectangle {
+                height: 1
+                width: root.width
+            }
+        }
     }
 }
-

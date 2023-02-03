@@ -12,6 +12,8 @@ find_package(Qt6 6.2 COMPONENTS Quick REQUIRED)
 
 qt_add_executable(${PROJECT_NAME}
     main.cpp
+    controllers/controller.cpp
+    controllers/controller.h
 )
 
 qt_add_qml_module(${PROJECT_NAME}
@@ -21,6 +23,7 @@ qt_add_qml_module(${PROJECT_NAME}
       MainView.qml
       RteTrkWptListView.qml
       ListHeader.qml
+      DevicesTreeView.qml
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES

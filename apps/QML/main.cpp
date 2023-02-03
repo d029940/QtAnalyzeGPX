@@ -2,7 +2,9 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 
+#include "controllers/controller.h"
 #include "garmintreemodel.h"
+#include "gpxtablemodel.h"
 
 int main(int argc, char *argv[])
 {
@@ -10,15 +12,24 @@ int main(int argc, char *argv[])
 
     // Create Models
     GarminTreeModel garminDrives{ GarminTreeModel::tr("Drives") };
-    // TODO: gpx models tbd
+    GpxTableModel tracks{ GpxTableModel::tr("Tracks") }; // Table view for tracks
+    GpxTableModel routes{ GpxTableModel::tr("Routes") }; // Table view for routes
+    GpxTableModel waypoints{ GpxTableModel::tr("Waypoints") }; // Table view for waypoints (POIs)
+
+    // TODO: additional gpx models tbd
+
+    // Controller
+    Controller mainController(garminDrives, tracks, routes, waypoints);
 
     QQmlApplicationEngine engine;
     QQmlContext *context = engine.rootContext();
 
-    // Connect models to views
-    // TODO: Can context be moved / refenced from the controller and connections are made in the
-    // controller?
+    // Connect models and controllers to views
+    context->setContextProperty("_tracks", &tracks);
+    context->setContextProperty("_routes", &routes);
+    context->setContextProperty("_waypoints", &waypoints);
     context->setContextProperty("_garminDrives", &garminDrives);
+    context->setContextProperty("_controller", &mainController);
 
     const QUrl url(u"qrc:/AnalyzeGPX/MainView.qml"_qs);
     QObject::connect(

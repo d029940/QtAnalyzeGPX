@@ -38,102 +38,104 @@
 #include "controller.h"
 
 #include <QCoreApplication>
-#include <QFileDialog>
-#include <QStandardPaths>
+#include <QUrl>
 
-#include "aboutdialog.h"
+// #include "aboutdialog.h"
 
-Controller::Controller()
+Controller::Controller(GarminTreeModel &drives, const GpxTableModel &trks,
+                       const GpxTableModel &rtes, const GpxTableModel &wpts)
 {
     // connect models to table / tree views
-    m_window.trkListView()->setModel(&m_trks);
-    m_window.rteListView()->setModel(&m_rtes);
-    m_window.wptListView()->setModel(&m_wpts);
-    m_window.devicesTreeView()->setModel(&m_drives);
+    //    m_window.trkListView()->setModel(&m_trks);
+    //    m_window.rteListView()->setModel(&m_rtes);
+    //    m_window.wptListView()->setModel(&m_wpts);
+    //    m_window.devicesTreeView()->setModel(&m_drives);
 
     // setup selection in table / tree views (Attention: models have to be
     // assigned before)
-    connect(m_window.devicesTreeView()->selectionModel(), &QItemSelectionModel::selectionChanged,
-            this, &Controller::gpxFileSelected);
+    //    connect(m_window.devicesTreeView()->selectionModel(),
+    //    &QItemSelectionModel::selectionChanged,
+    //            this, &Controller::gpxFileSelected);
 
+    m_drives = &drives;
+    m_trks = &trks;
+    m_rtes = &rtes;
+    m_wpts = &wpts;
     // Binding model changes to view
-    connect(this, &Controller::onTrkModelChanged, &m_trks, &GpxTableModel::upDateModel);
-    connect(this, &Controller::onRteModelChanged, &m_rtes, &GpxTableModel::upDateModel);
-    connect(this, &Controller::onWptModelChanged, &m_wpts, &GpxTableModel::upDateModel);
+    connect(this, &Controller::onTrkModelChanged, m_trks, &GpxTableModel::upDateModel);
+    connect(this, &Controller::onRteModelChanged, m_rtes, &GpxTableModel::upDateModel);
+    connect(this, &Controller::onWptModelChanged, m_wpts, &GpxTableModel::upDateModel);
 
     // Connect all actions of main window
-    connect(m_window.exitButton(), &QPushButton::clicked, &QCoreApplication::exit);
-    connect(m_window.openGpxButton(), &QPushButton::clicked, this, &Controller::openGpxFile);
-    connect(m_window.deleteGpxButton(), &QPushButton::clicked, this, &Controller::deleteGpxFile);
-    connect(m_window.loadGpxButton(), &QPushButton::clicked, this, &Controller::loadGarminDirs);
+    //    connect(m_window.exitButton(), &QPushButton::clicked, &QCoreApplication::exit);
+    //    connect(m_window.openGpxButton(), &QPushButton::clicked, this, &Controller::openGpxFile);
+    //    connect(m_window.deleteGpxButton(), &QPushButton::clicked, this,
+    //    &Controller::deleteGpxFile); connect(m_window.loadGpxButton(), &QPushButton::clicked,
+    //    this, &Controller::loadGarminDirs);
 
-    connect(m_window.actionAbout(), &QAction::triggered, this, &Controller::showAboutDialog);
+    //    connect(m_window.actionAbout(), &QAction::triggered, this, &Controller::showAboutDialog);
 
-    m_window.show();
+    //    m_window.show();
 }
 
 void Controller::loadGarminDirs()
 {
-    m_drives.loadGarminDevices();
+    m_drives->loadGarminDevices();
     m_gpxFile.reset();
     emit onTrkModelChanged(m_gpxFile.trkList());
     emit onWptModelChanged(m_gpxFile.wptList());
     emit onRteModelChanged(m_gpxFile.rteList());
 
     // expand garmin device tree
-    QTreeView *deviceTree = m_window.devicesTreeView();
-    deviceTree->setExpandsOnDoubleClick(true);
-    if (deviceTree->itemsExpandable()) {
-        deviceTree->expandToDepth(2);
-    }
+    //    QTreeView *deviceTree = m_window.devicesTreeView();
+    //    deviceTree->setExpandsOnDoubleClick(true);
+    //    if (deviceTree->itemsExpandable()) {
+    //        deviceTree->expandToDepth(2);
+    //    }
 }
 
 // Widget dependant
-void Controller::openGpxFile()
+void Controller::openGpxFile(const QUrl &url)
 {
-    QStringList lst = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);
-    QString filename =
-            QFileDialog::getOpenFileName(nullptr, QFileDialog::tr("Open GPX file"), lst.front(),
-                                         QFileDialog::tr("GPX (*.gpx *.GPX)"));
-
-    newGpxFileModelsUpdate(filename);
+    newGpxFileModelsUpdate(url.toLocalFile());
 }
 
 // Widget dependant
 void Controller::deleteGpxFile()
 {
     // Get current selection is different in QMS and Widgets
-    QModelIndexList indices = m_window.devicesTreeView()->selectionModel()->selectedIndexes();
-    if (indices.isEmpty())
-        return;
+    //    QModelIndexList indices = m_window.devicesTreeView()->selectionModel()->selectedIndexes();
+    //    if (indices.isEmpty())
+    //        return;
 
-    auto gpxFile = static_cast<GarminTreeNode *>(indices.front().internalPointer());
-    QFile::remove(gpxFile->fullPath());
+    //    auto gpxFile = static_cast<GarminTreeNode *>(indices.front().internalPointer());
+    //    QFile::remove(gpxFile->fullPath());
     loadGarminDirs();
 }
 
 // Widget dependant
-void Controller::gpxFileSelected(const QItemSelection &selected, const QItemSelection &deselected)
-{
-    if (selected.indexes().isEmpty())
-        m_window.deleteGpxButton()->setDisabled(true);
-    else {
-        auto gpxFile = static_cast<GarminTreeNode *>(selected.indexes().front().internalPointer());
-        if (gpxFile->childCount() == 0) {
-            // Existing GPX file selected
-            m_window.deleteGpxButton()->setDisabled(false);
-            newGpxFileModelsUpdate(gpxFile->fullPath());
+// void Controller::gpxFileSelected(const QItemSelection &selected, const QItemSelection
+// &deselected)
+//{
+//    if (selected.indexes().isEmpty())
+//        m_window.deleteGpxButton()->setDisabled(true);
+//    else {
+//        auto gpxFile = static_cast<GarminTreeNode
+//        *>(selected.indexes().front().internalPointer()); if (gpxFile->childCount() == 0) {
+//            // Existing GPX file selected
+//            m_window.deleteGpxButton()->setDisabled(false);
+//            newGpxFileModelsUpdate(gpxFile->fullPath());
 
-        } else {
-            m_window.deleteGpxButton()->setDisabled(true);
-        }
-    }
-}
+//        } else {
+//            m_window.deleteGpxButton()->setDisabled(true);
+//        }
+//    }
+//}
 
 void Controller::showAboutDialog()
 {
-    ABoutDialog dlg{};
-    dlg.exec();
+    //    ABoutDialog dlg{};
+    //    dlg.exec();
 }
 
 // UI independent

@@ -37,48 +37,40 @@
 ****************************************************************************/
 #pragma once
 
-#include <QAbstractTableModel>
+#include <QObject>
+// #include "mainwindow.h"
+#include "garmingpxfile.h"
+#include "gpxtablemodel.h"
+#include "garmintreemodel.h"
 
-class GpxTableModel : public QAbstractTableModel
+class Controller : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit GpxTableModel(const QString &header, QObject *parent = nullptr);
-
-    enum Roles { NameRole = Qt::UserRole + 1 };
-    Q_ENUM(Roles)
-
-    // ----- QAbstractItemModel interface ----
-    // Header:
-    QVariant headerData(int section, Qt::Orientation orientation,
-                        int role = Qt::DisplayRole) const override;
-
-    // Basic functionality:
-    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
-
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
-
-    // Editable:
-    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
-
-    Qt::ItemFlags flags(const QModelIndex &index) const override;
-
-    // Add data:
-    bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
-
-    // Remove data:
-    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
-
-    // ----- Define Roles ----
-    QHash<int, QByteArray> roleNames() const override;
+    Controller(GarminTreeModel &drives, const GpxTableModel &trks, const GpxTableModel &rtes,
+               const GpxTableModel &wpts);
 
 public slots:
-    // Update Model when model data change
-    void upDateModel(const QStringList &newItems);
+    Q_INVOKABLE void loadGarminDirs();
+    Q_INVOKABLE void openGpxFile(const QUrl &url);
+    void deleteGpxFile();
+    //    void gpxFileSelected(const QItemSelection &selected, const QItemSelection &deselected);
+    void showAboutDialog();
+
+signals:
+    void onTrkModelChanged(const QStringList &newItems);
+    void onRteModelChanged(const QStringList &newItems);
+    void onWptModelChanged(const QStringList &newItems);
 
 private:
-    QStringList m_items;
-    QString m_header;
+    //    MainWindow m_window;
+    GarminGpxFile m_gpxFile{}; // Current GPX file shown in table views
+    const GpxTableModel *m_trks; // Table view for tracks
+    const GpxTableModel *m_rtes; // Table view for routes
+    const GpxTableModel *m_wpts; // Table view for waypoints (POIs)
+    GarminTreeModel *m_drives; // Drives recognized by Garmin gps
+
+    void newGpxFileModelsUpdate(
+            const QString &filename); // updates m_trks, m_rtes, m_wpts when new GPX file is loaded
 };

@@ -81,11 +81,17 @@ QVariant GpxTableModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
 
+    // Currently, we only use the "name" role for QML and DisplayRole for Widgets
+    if (role != NameRole && role != Qt::DisplayRole) {
+        return QVariant();
+    }
     // A model can return data for different roles.
     // The default role is the display role.
     // it can be accesses in QML with "model.display"
+
     switch (role) {
     case Qt::DisplayRole:
+    case NameRole:
         // Return the item name for the particular row
         return m_items.at(row);
     }
@@ -132,4 +138,11 @@ void GpxTableModel::upDateModel(const QStringList &newItems)
     beginResetModel();
     m_items = newItems;
     endResetModel();
+}
+
+// ----- Roles to display the model -----
+QHash<int, QByteArray> GpxTableModel::roleNames() const
+{
+    static QHash<int, QByteArray> mapping{ { NameRole, "name" } };
+    return mapping;
 }

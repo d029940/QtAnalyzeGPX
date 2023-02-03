@@ -8,11 +8,16 @@ ListView {
     property string listHeaderText
     property string roleDisplay
     property var myModel
+    property int margin: 10
 
     anchors.fill: parent
-    anchors.margins: 10
+    anchors.margins: margin
 
-    implicitWidth: Math.max(root.currentItem.implicitWidth,
+    spacing: 4
+
+    //    implicitWidth: Math.max(root.width,
+    //                            headerItem.implicitWidth) + (2 * anchors.margins)
+    implicitWidth: Math.min(root.width,
                             headerItem.implicitWidth) + (2 * anchors.margins)
 
     focus: true
@@ -25,24 +30,9 @@ ListView {
     headerPositioning: ListView.OverlayHeader
 
     model: myModel
-    delegate: Rectangle {
-        id: delegateRect
 
-        //            implicitWidth: t_metrics.tightBoundingRect.width + 4
-        implicitWidth: mytext.paintedWidth
-        //            implicitWidth: contentWidth
-        //            implicitHeight: t_metrics.boundingRect.height + 4
-        implicitHeight: mytext.paintedHeight
-
-        Text {
-            id: mytext
-            anchors.centerIn: parent
-            text: "GPX Route, Track and ... so much more ..."
-        }
-        TextMetrics {
-            id: t_metrics
-            font: mytext.font
-            text: mytext.text
-        }
+    delegate: Label {
+        id: mytext
+        text: model.name
     }
 }
