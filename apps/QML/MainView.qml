@@ -47,12 +47,11 @@ ApplicationWindow {
                 SplitView.fillWidth: true
                 SplitView.fillHeight: true
                 SplitView.preferredWidth: parent.width / 4 // TODO: change if loaded with data
-                SplitView.minimumWidth: tracksView.headerItem.implicitWidth + (2 * myMargin)
+                SplitView.minimumWidth: tracksView.implicitWidth + (2 * myMargin)
 
                 border.color: "black"
-                color: "transparent"
+                color: activePalette.base
 
-                //                color: activePalette.base
                 DevicesTreeView {
                     id: devicesView
                     width: filesList.width
@@ -60,62 +59,63 @@ ApplicationWindow {
                     anchors.fill: parent
                     myModel: _garminDrives
                     listHeaderText: qsTr("Drives")
-                    margin: myMargin
                 }
             }
 
             Rectangle {
                 id: tracksRect
 
-                //                height: tracksView.contentHeight
-                SplitView.minimumWidth: tracksView.headerItem.implicitWidth + (2 * myMargin)
+                SplitView.minimumWidth: tracksView.implicitWidth + (2 * myMargin)
                 SplitView.preferredWidth: parent.width / 4
 
                 border.color: "black"
-                //                color: activePalette.base
-                color: "transparent"
+                color: activePalette.base
 
                 RteTrkWptListView {
                     id: tracksView
                     listHeaderText: qsTr("Tracks")
                     roleDisplay: "Tracks"
                     myModel: _tracks
+                    width: parent.width
+                    height: parent.height
                 }
             }
 
             Rectangle {
                 id: routesRect
 
-                height: routesView.contentHeight
-                SplitView.minimumWidth: routesView.headerItem.implicitWidth + (2 * myMargin)
+                SplitView.minimumWidth: routesView.implicitWidth + (2 * myMargin)
                 SplitView.preferredWidth: parent.width / 4
 
                 border.color: "black"
-                color: "transparent"
+                color: activePalette.base
 
                 RteTrkWptListView {
                     id: routesView
                     listHeaderText: qsTr("Routes")
                     roleDisplay: "Routes"
                     myModel: _routes
+                    width: parent.width
+                    height: parent.height
                 }
             }
 
             Rectangle {
                 id: waypointsRect
 
-                height: waypointsView.contentHeight
-                SplitView.minimumWidth: waypointsView.headerItem.implicitWidth + (2 * myMargin)
+                SplitView.minimumWidth: waypointsView.implicitWidth + (2 * myMargin)
                 SplitView.preferredWidth: parent.width / 4
 
                 border.color: "black"
-                color: "transparent"
+                color: activePalette.base
 
                 RteTrkWptListView {
                     id: waypointsView
                     listHeaderText: qsTr("Waypoints")
                     roleDisplay: "Waypoints"
                     myModel: _waypoints
+                    width: parent.width
+                    height: parent.height
                 }
             }
         }

@@ -2,6 +2,8 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 
+#include <QQuickView>
+
 #include "controllers/controller.h"
 #include "garmintreemodel.h"
 #include "gpxtablemodel.h"
@@ -15,8 +17,6 @@ int main(int argc, char *argv[])
     GpxTableModel tracks{ GpxTableModel::tr("Tracks") }; // Table view for tracks
     GpxTableModel routes{ GpxTableModel::tr("Routes") }; // Table view for routes
     GpxTableModel waypoints{ GpxTableModel::tr("Waypoints") }; // Table view for waypoints (POIs)
-
-    // TODO: additional gpx models tbd
 
     // Controller
     Controller mainController(garminDrives, tracks, routes, waypoints);

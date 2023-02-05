@@ -7,7 +7,7 @@ Item {
     property alias name: myText.text
     width: parent.width
     implicitWidth: myText.implicitWidth
-    implicitHeight: col.implicitHeight
+    implicitHeight: rectId.height
 
     property int mySpacing: 10
 
@@ -17,23 +17,28 @@ Item {
     }
 
     Rectangle {
-        height: myText.implicitHeight
+        id: rectId
+        height: myText.implicitHeight + 2 * mySpacing
         width: root.width
         color: activePalette.base
+
         ColumnLayout {
             id: col
+            anchors.fill: parent
+            anchors.bottomMargin: myMargin
+            spacing: 0
 
-            //        spacing: mySpacing
             Label {
+                Layout.margins: myMargin
                 color: activePalette.text
                 id: myText
                 text: name
             }
 
-            Rectangle {
-                height: 1
-                width: root.width
-            }
+            //                        Rectangle {
+            //                            height: 1
+            //                            width: root.width
+            //                        }
         }
     }
 }

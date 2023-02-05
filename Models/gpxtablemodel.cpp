@@ -99,40 +99,6 @@ QVariant GpxTableModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-bool GpxTableModel::setData(const QModelIndex &index, const QVariant &value, int role)
-{
-    if (data(index, role) != value) {
-        // FIXME: Implement me!
-        emit dataChanged(index, index, { role });
-        return true;
-    }
-    return false;
-}
-
-Qt::ItemFlags GpxTableModel::flags(const QModelIndex &index) const
-{
-    if (!index.isValid())
-        return Qt::NoItemFlags;
-
-    return QAbstractItemModel::flags(index) | Qt::ItemIsEditable; // FIXME: Implement me!
-}
-
-bool GpxTableModel::insertRows(int row, int count, const QModelIndex &parent)
-{
-    beginInsertRows(parent, row, row + count - 1);
-    // FIXME: Implement me!
-    endInsertRows();
-    return true;
-}
-
-bool GpxTableModel::removeRows(int row, int count, const QModelIndex &parent)
-{
-    beginRemoveRows(parent, row, row + count - 1);
-    // FIXME: Implement me!
-    endRemoveRows();
-    return true;
-}
-
 void GpxTableModel::upDateModel(const QStringList &newItems)
 {
     beginResetModel();
@@ -145,4 +111,10 @@ QHash<int, QByteArray> GpxTableModel::roleNames() const
 {
     static QHash<int, QByteArray> mapping{ { NameRole, "name" } };
     return mapping;
+}
+
+// ----- Debugging -----
+void GpxTableModel::debug() const
+{
+    qDebug() << m_items;
 }

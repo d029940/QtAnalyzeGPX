@@ -2,37 +2,41 @@ import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 
-ListView {
+Item {
     id: root
 
     property string listHeaderText
     property string roleDisplay
     property var myModel
-    property int margin: 10
+    property int myMargin: 10
+    property int mySpacing: 4
+    required width
+    required height
 
-    anchors.fill: parent
-    anchors.margins: margin
+    ColumnLayout {
 
-    spacing: 4
+        anchors.fill: parent
+        anchors.margins: myMargin
 
-    //    implicitWidth: Math.max(root.width,
-    //                            headerItem.implicitWidth) + (2 * anchors.margins)
-    implicitWidth: Math.min(root.width,
-                            headerItem.implicitWidth) + (2 * anchors.margins)
+        ListHeader {
+            id: headerTextId
+            name: listHeaderText
+        }
 
-    focus: true
-    clip: true
+        ListView {
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            Layout.minimumWidth: headerTextId.implicitWidth
 
-    header: ListHeader {
-        name: listHeaderText
-        z: 2
-    }
-    headerPositioning: ListView.OverlayHeader
+            spacing: mySpacing
+            clip: true
 
-    model: myModel
+            model: myModel
 
-    delegate: Label {
-        id: mytext
-        text: model.name
+            delegate: Label {
+                id: mytext
+                text: model.name
+            }
+        }
     }
 }

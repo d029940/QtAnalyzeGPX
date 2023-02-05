@@ -2,3 +2,6 @@
 -	Resources
 -	Deployment / Installer (MacOs done)
 -	Translation
+
+- QML:
+    - replace Rectangles by Frames
