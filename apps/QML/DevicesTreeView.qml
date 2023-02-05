@@ -7,25 +7,27 @@ Item {
 
     property string listHeaderText
     property var myModel
-    property int margin: 8
+    property int myMargin: 8
+    required width
+    required height
 
     anchors.fill: parent
-    anchors.margins: margin
+    anchors.margins: myMargin
 
     ColumnLayout {
-        spacing: margin
+        spacing: myMargin
 
         ListHeader {
-            width: root.width
             name: listHeaderText
         }
 
         TreeView {
             id: garminDrives
             Layout.fillHeight: true
-            Layout.preferredHeight: contentHeight
+            Layout.fillWidth: true
+            Layout.preferredHeight: root.height
+            Layout.preferredWidth: root.width
 
-            //            Layout.preferredWidth: contentWidth
             delegate: TreeViewDelegate {
                 contentItem: Label {
                     id: delegatetext

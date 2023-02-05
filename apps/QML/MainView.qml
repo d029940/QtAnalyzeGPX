@@ -8,7 +8,7 @@ ApplicationWindow {
     id: root
     visible: true
     title: qsTr("Analyze GPX file")
-    color: "transparent"
+//    color: "transparent"
 
     property int myMargin: 10
 
@@ -41,22 +41,25 @@ ApplicationWindow {
             Layout.fillHeight: true
             Layout.fillWidth: true
             Layout.minimumHeight: mainLayout.minimumWidth - (2 * myMargin)
+            Layout.preferredHeight: mainLayout.height
 
             Rectangle {
                 id: filesList
                 SplitView.fillWidth: true
                 SplitView.fillHeight: true
-                SplitView.preferredWidth: parent.width / 4 // TODO: change if loaded with data
-                SplitView.minimumWidth: tracksView.implicitWidth + (2 * myMargin)
+                SplitView.preferredWidth: parent.width / 4
+                SplitView.preferredHeight: parent.height
 
                 border.color: "black"
                 color: activePalette.base
 
                 DevicesTreeView {
                     id: devicesView
-                    width: filesList.width
 
                     anchors.fill: parent
+                    height: parent.height
+                    width: parent.width
+
                     myModel: _garminDrives
                     listHeaderText: qsTr("Drives")
                 }
