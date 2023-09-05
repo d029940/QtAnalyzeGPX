@@ -28,6 +28,7 @@ find_package(Qt6 REQUIRED COMPONENTS Core)
 add_library(garmin_drive_loc STATIC
   garmintreenode.cpp
   garmintreenode.h
+  garminfiles.h garminfiles.cpp
 )
 target_link_libraries(garmin_drive_loc PRIVATE Qt6::Core)
 target_include_directories(garmin_drive_loc INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})

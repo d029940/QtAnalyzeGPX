@@ -54,6 +54,8 @@ public:
 public slots:
     Q_INVOKABLE void loadGarminDirs();
     Q_INVOKABLE void openGpxFile(const QUrl &url);
+    Q_INVOKABLE void getSelectedRow(const QModelIndex &index) const;
+
     void deleteGpxFile();
     //    void gpxFileSelected(const QItemSelection &selected, const QItemSelection &deselected);
     void showAboutDialog();

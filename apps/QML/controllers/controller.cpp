@@ -100,6 +100,13 @@ void Controller::openGpxFile(const QUrl &url)
     newGpxFileModelsUpdate(url.toLocalFile());
 }
 
+void Controller::getSelectedRow(const QModelIndex &index) const
+{
+    GarminTreeNode *item = static_cast<GarminTreeNode *>(index.internalPointer());
+    qDebug() << "Show QModelIndex " << index << " internal pointer " << index.internalPointer()
+             << " Data " << item->name();
+}
+
 // Widget dependant
 void Controller::deleteGpxFile()
 {

@@ -46,7 +46,10 @@ set(LICENSES_LIB licenses)
 add_subdirectory(utils)
 
 # Garmin GPX & Drive Location libs:
- add_subdirectory(libs)
+ add_subdirectory(libs/garmin)
+
+# Drive / Volume info
+ add_subdirectory(libs/volumeInfo)
 
 # Gui - QtWidgets
 add_subdirectory(apps/Widgets)

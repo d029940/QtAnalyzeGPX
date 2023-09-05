@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Controls.Basic
 import QtQuick.Layouts
 
 Item {
@@ -29,8 +30,18 @@ Item {
             Layout.preferredWidth: root.width
 
             delegate: TreeViewDelegate {
+                id: treeDelegate
+                implicitWidth: root.width
+
+                Component.onCompleted: garminDrives.expandRecursively(row)
+
+                onClicked: {
+                    var mi = treeDelegate.treeView.index(row, column)
+                    _controller.getSelectedRow(mi)
+                }
+
                 contentItem: Label {
-                    id: delegatetext
+                    id: label
                     text: model.name
                 }
             }
