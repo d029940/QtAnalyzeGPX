@@ -48,6 +48,7 @@ GarminGpxFile::GarminGpxFile() { }
 void GarminGpxFile::parse(const QString &filename)
 {
     QFile file{ filename };
+    m_fileName = filename;
     QDomDocument gpxFileDOM;
 
     // Load the fike
@@ -168,4 +169,9 @@ void GarminGpxFile::listTrkRteWpt(QDomElement parent, GpxContentType type)
             list->append(name.text());
         }
     }
+}
+
+QString GarminGpxFile::fileName() const
+{
+    return m_fileName;
 }

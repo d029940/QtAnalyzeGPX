@@ -45,6 +45,7 @@
         <bool>false</bool>
        </attribute>
       </widget>
+      <widget class="QTableView" name="fitListView"/>
      </widget>
     </item>
     <item>
@@ -102,7 +103,7 @@
      <x>0</x>
      <y>0</y>
      <width>1048</width>
-     <height>22</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp">

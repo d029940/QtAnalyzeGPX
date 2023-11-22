@@ -59,7 +59,7 @@ public:
     ///
     void parse(const QString &filename);
 
-    // Manipulate routes, tracks, waypoints lists
+    // Manipulate routes, tracks, waypoints, courses lists
     void appendRoute(const QString &route);
     void appendTrack(const QString &track);
     void appendWaypoint(const QString &waypoint);
@@ -76,6 +76,8 @@ public:
     QStringList wptList() const;
     void setWptList(const QStringList &wptList);
 
+    QString fileName() const;
+
 private:
     // Tag names in Garmin GPX files
     enum GpxContentType { rte = 0, trk, wpt };
@@ -88,4 +90,7 @@ private:
     QStringList m_trkList;
     QStringList m_rteList;
     QStringList m_wptList;
+
+    // Filename
+    QString m_fileName;
 };

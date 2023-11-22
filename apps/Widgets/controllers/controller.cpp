@@ -108,8 +108,9 @@ void Controller::deleteGpxFile()
         return;
 
     auto gpxFile = static_cast<GarminTreeNode *>(indices.front().internalPointer());
-    QFile::remove(gpxFile->fullPath());
-    loadGarminDirs();
+    if (QFile::remove(gpxFile->fullPath())) {
+        loadGarminDirs();
+    }
 }
 
 // Widget dependant

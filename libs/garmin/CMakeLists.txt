@@ -19,6 +19,16 @@ add_library(garmin_gpx STATIC
 target_link_libraries(garmin_gpx PRIVATE Qt6::Xml)
 target_include_directories(garmin_gpx INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
 
+
+####################################################
+# Garmin FIT lib
+
+add_library(garmin_fit STATIC
+  garminfitfile.h garminfitfile.cpp
+)
+target_link_libraries(garmin_fit PRIVATE Qt6::Xml)
+target_include_directories(garmin_fit INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
+
 ####################################################
 # Garmin Location lib
 

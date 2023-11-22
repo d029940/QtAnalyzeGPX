@@ -35,44 +35,9 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
 **
 ****************************************************************************/
-#pragma once
+#include "garminfitfile.h"
 
-#include <QObject>
-// #include "mainwindow.h"
-#include "garmingpxfile.h"
-#include "gpxtablemodel.h"
-#include "garmintreemodel.h"
-
-class Controller : public QObject
+GarminFitFile::GarminFitFile(const QString &dirName)
 {
-    Q_OBJECT
-
-public:
-    Controller(GarminTreeModel &drives, const GpxTableModel &trks, const GpxTableModel &rtes,
-               const GpxTableModel &wpts);
-
-public slots:
-    Q_INVOKABLE void loadGarminDirs();
-    Q_INVOKABLE void openGpxFile(const QUrl &url);
-    Q_INVOKABLE void getSelectedRow(const QModelIndex &index);
-
-    void deleteGpxFile();
-    //    void gpxFileSelected(const QItemSelection &selected, const QItemSelection &deselected);
-    void showAboutDialog();
-
-signals:
-    void onTrkModelChanged(const QStringList &newItems);
-    void onRteModelChanged(const QStringList &newItems);
-    void onWptModelChanged(const QStringList &newItems);
-
-private:
-    //    MainWindow m_window;
-    GarminGpxFile m_gpxFile{}; // Current GPX file shown in table views
-    const GpxTableModel *m_trks; // Table view for tracks
-    const GpxTableModel *m_rtes; // Table view for routes
-    const GpxTableModel *m_wpts; // Table view for waypoints (POIs)
-    GarminTreeModel *m_drives; // Drives recognized by Garmin gps
-
-    void newGpxFileModelsUpdate(
-            const QString &filename); // updates m_trks, m_rtes, m_wpts when new GPX file is loaded
-};
+    // look for all files with extension "fit" in directory and collect them
+}

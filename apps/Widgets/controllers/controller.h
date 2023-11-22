@@ -61,6 +61,7 @@ signals:
     void onTrkModelChanged(const QStringList &newItems);
     void onRteModelChanged(const QStringList &newItems);
     void onWptModelChanged(const QStringList &newItems);
+    void onFitModelChanged(const QStringList &newItems);
 
 private:
     MainWindow m_window;
@@ -68,6 +69,7 @@ private:
     GpxTableModel m_trks{ tr("Tracks") }; // Table view for tracks
     GpxTableModel m_rtes{ tr("Routes") }; // Table view for routes
     GpxTableModel m_wpts{ tr("Waypoints") }; // Table view for waypoints (POIs)
+    GpxTableModel m_fits{ tr("Courses") }; // Table view for waypoints (POIs)
     GarminTreeModel m_drives{ tr("Drives") }; // Drives recognized by Garmin gps
 
     void newGpxFileModelsUpdate(

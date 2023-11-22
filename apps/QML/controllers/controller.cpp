@@ -39,6 +39,8 @@
 
 #include <QCoreApplication>
 #include <QUrl>
+#include <QFile>
+#include <QFileInfo>
 
 // #include "aboutdialog.h"
 
@@ -100,24 +102,30 @@ void Controller::openGpxFile(const QUrl &url)
     newGpxFileModelsUpdate(url.toLocalFile());
 }
 
-void Controller::getSelectedRow(const QModelIndex &index) const
+void Controller::getSelectedRow(const QModelIndex &index)
 {
+    // TODO: disable Delete button
     GarminTreeNode *item = static_cast<GarminTreeNode *>(index.internalPointer());
-    qDebug() << "Show QModelIndex " << index << " internal pointer " << index.internalPointer()
-             << " Data " << item->name();
+    if (QFile::exists(item->fullPath()) && QFileInfo(item->fullPath()).isFile()) {
+        newGpxFileModelsUpdate(item->fullPath());
+        // TODO: enable Delete button
+    }
 }
 
 // Widget dependant
 void Controller::deleteGpxFile()
 {
+    // TODO: get current file
     // Get current selection is different in QMS and Widgets
     //    QModelIndexList indices = m_window.devicesTreeView()->selectionModel()->selectedIndexes();
     //    if (indices.isEmpty())
     //        return;
 
     //    auto gpxFile = static_cast<GarminTreeNode *>(indices.front().internalPointer());
-    //    QFile::remove(gpxFile->fullPath());
-    loadGarminDirs();
+    if (QFile::remove(m_gpxFile.fileName())) {
+        loadGarminDirs();
+        // TODO: disable Delete Button
+    }
 }
 
 // Widget dependant
@@ -150,6 +158,7 @@ void Controller::newGpxFileModelsUpdate(const QString &filename)
 {
     m_gpxFile.reset();
     m_gpxFile.parse(filename);
+    // TODO: Enable delete button
     // either use signal and slot to update the tableviews (bindings)
     emit onTrkModelChanged(m_gpxFile.trkList());
     emit onWptModelChanged(m_gpxFile.wptList());
