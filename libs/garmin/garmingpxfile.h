@@ -85,9 +85,7 @@ public:
 private:
     // Tag names in Garmin GPX files
     enum GpxContentType { rte = 0, trk, wpt, fit };
-    QStringList m_tagNames{ "rte", "trk",
-                            "wpt"
-                            "fit" };
+    QStringList m_tagNames{ "rte", "trk", "wpt", "fit" };
 
     // fills trk, rte, wpt lists
     void listTrkRteFitWpt(QDomElement parent, GpxContentType type);
