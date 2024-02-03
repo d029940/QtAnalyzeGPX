@@ -49,6 +49,7 @@ Controller::Controller()
     m_window.trkListView()->setModel(&m_trks);
     m_window.rteListView()->setModel(&m_rtes);
     m_window.wptListView()->setModel(&m_wpts);
+    m_window.fitListView()->setModel(&m_fits);
     m_window.devicesTreeView()->setModel(&m_drives);
 
     // setup selection in table / tree views (Attention: models have to be
@@ -60,6 +61,7 @@ Controller::Controller()
     connect(this, &Controller::onTrkModelChanged, &m_trks, &GpxTableModel::upDateModel);
     connect(this, &Controller::onRteModelChanged, &m_rtes, &GpxTableModel::upDateModel);
     connect(this, &Controller::onWptModelChanged, &m_wpts, &GpxTableModel::upDateModel);
+    connect(this, &Controller::onFitModelChanged, &m_fits, &GpxTableModel::upDateModel);
 
     // Connect all actions of main window
     connect(m_window.exitButton(), &QPushButton::clicked, &QCoreApplication::exit);
@@ -79,6 +81,7 @@ void Controller::loadGarminDirs()
     emit onTrkModelChanged(m_gpxFile.trkList());
     emit onWptModelChanged(m_gpxFile.wptList());
     emit onRteModelChanged(m_gpxFile.rteList());
+    emit onFitModelChanged(m_gpxFile.fitList());
 
     // expand garmin device tree
     QTreeView *deviceTree = m_window.devicesTreeView();
@@ -146,6 +149,7 @@ void Controller::newGpxFileModelsUpdate(const QString &filename)
     emit onTrkModelChanged(m_gpxFile.trkList());
     emit onWptModelChanged(m_gpxFile.wptList());
     emit onRteModelChanged(m_gpxFile.rteList());
+    emit onFitModelChanged(m_gpxFile.fitList());
     // or update the tableviews directly
     //    m_trks.upDateModel(m_gpxFile.trkList());
     //    m_wpts.upDateModel(m_gpxFile.wptList());

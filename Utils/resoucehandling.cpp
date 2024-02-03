@@ -43,7 +43,7 @@ QString ResouceHandling::getResourcesPath()
 {
 #if defined(Q_OS_WIN)
     return QCoreApplication::applicationDirPath() + "/";
-#elif defined(Q_OS_OSX)
+#elif defined(Q_OS_MACOS)
     return QCoreApplication::applicationDirPath() + "/../Resources/";
 #elif defined(Q_OS_LINUX)
     return QCoreApplication::applicationDirPath() + "/../share/yourapplication/";

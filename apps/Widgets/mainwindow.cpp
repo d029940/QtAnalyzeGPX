@@ -88,6 +88,11 @@ QTableView *MainWindow::wptListView() const
     return ui->wptListView;
 }
 
+QTableView *MainWindow::fitListView() const
+{
+    return ui->fitListView;
+}
+
 QTreeView *MainWindow::devicesTreeView() const
 {
     return ui->dirTreeView;

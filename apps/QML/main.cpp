@@ -16,6 +16,7 @@ int main(int argc, char *argv[])
     GarminTreeModel garminDrives{ GarminTreeModel::tr("Drives") };
     GpxTableModel tracks{ GpxTableModel::tr("Tracks") }; // Table view for tracks
     GpxTableModel routes{ GpxTableModel::tr("Routes") }; // Table view for routes
+    GpxTableModel courses{ GpxTableModel::tr("Courses") }; // Table view for routes
     GpxTableModel waypoints{ GpxTableModel::tr("Waypoints") }; // Table view for waypoints (POIs)
 
     // Controller
@@ -27,6 +28,7 @@ int main(int argc, char *argv[])
     // Connect models and controllers to views
     context->setContextProperty("_tracks", &tracks);
     context->setContextProperty("_routes", &routes);
+    context->setContextProperty("_courses", &courses);
     context->setContextProperty("_waypoints", &waypoints);
     context->setContextProperty("_garminDrives", &garminDrives);
     context->setContextProperty("_controller", &mainController);

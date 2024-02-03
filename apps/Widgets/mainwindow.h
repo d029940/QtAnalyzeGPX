@@ -65,6 +65,7 @@ public:
     QTableView *trkListView() const;
     QTableView *rteListView() const;
     QTableView *wptListView() const;
+    QTableView *fitListView() const;
     QTreeView *devicesTreeView() const;
 
 private:
