@@ -51,10 +51,30 @@ public:
     Controller();
 
 public slots:
+    /**
+     * @brief loads the garmin tree, consisting of the mounted drives (with garmin folder).
+     *        If available the tree contans nodes for the gpx files and for the courses folder.
+     *        The tables tracks, routes, waypoints and courses are resetted (emptied)
+     */
     void loadGarminDirs();
+    /**
+     * @brief open a file chooses to select a gpx file. The contents
+     *        will be shown in the tracks, routes and waypoints tables.
+     */
     void openGpxFile();
+    /**
+     * @brief deletes selected gpxfile from disc.
+     */
     void deleteGpxFile();
-    void gpxFileSelected(const QItemSelection &selected, const QItemSelection &deselected);
+    /**
+     * @brief if a gpx file is selected, the tables tracks, routes and waypoints are populated
+     *        with resp. info from gpx file.
+     *        if a course node is selected, the courses directory is read and the available
+     *        courses are displayed in the courses table
+     * @param selected - selected node in tree
+     * @param deselected - node used
+     */
+    void garminNodeSelected(const QItemSelection &selected, const QItemSelection &deselected);
     void showAboutDialog();
 
 signals:
@@ -65,7 +85,7 @@ signals:
 
 private:
     MainWindow m_window;
-    GarminGpxFile m_gpxFile{}; // Current GPX file shown in table views
+    GarminGpxFile m_gpxFile{}; // Current GPX file and courses shown in table views
     GpxTableModel m_trks{ tr("Tracks") }; // Table view for tracks
     GpxTableModel m_rtes{ tr("Routes") }; // Table view for routes
     GpxTableModel m_wpts{ tr("Waypoints") }; // Table view for waypoints (POIs)
@@ -74,4 +94,7 @@ private:
 
     void newGpxFileModelsUpdate(
             const QString &filename); // updates m_trks, m_rtes, m_wpts when new GPX file is loaded
+    void
+    newCoursesModelsUpdate(const QString &dirName); // updates m_fits when new courses are loaded
+    void updateUI();
 };

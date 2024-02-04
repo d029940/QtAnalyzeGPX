@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
     GpxTableModel waypoints{ GpxTableModel::tr("Waypoints") }; // Table view for waypoints (POIs)
 
     // Controller
-    Controller mainController(garminDrives, tracks, routes, waypoints);
+    Controller mainController(garminDrives, tracks, routes, waypoints, courses);
 
     QQmlApplicationEngine engine;
     QQmlContext *context = engine.rootContext();

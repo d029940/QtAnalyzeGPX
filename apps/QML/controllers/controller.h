@@ -49,7 +49,7 @@ class Controller : public QObject
 
 public:
     Controller(GarminTreeModel &drives, const GpxTableModel &trks, const GpxTableModel &rtes,
-               const GpxTableModel &wpts);
+               const GpxTableModel &wpts, const GpxTableModel &fits);
 
 public slots:
     Q_INVOKABLE void loadGarminDirs();
@@ -64,6 +64,7 @@ signals:
     void onTrkModelChanged(const QStringList &newItems);
     void onRteModelChanged(const QStringList &newItems);
     void onWptModelChanged(const QStringList &newItems);
+    void onFitModelChanged(const QStringList &newItems);
 
 private:
     //    MainWindow m_window;
@@ -71,6 +72,7 @@ private:
     const GpxTableModel *m_trks; // Table view for tracks
     const GpxTableModel *m_rtes; // Table view for routes
     const GpxTableModel *m_wpts; // Table view for waypoints (POIs)
+    const GpxTableModel *m_fits; // Table view for courses
     GarminTreeModel *m_drives; // Drives recognized by Garmin gps
 
     void newGpxFileModelsUpdate(

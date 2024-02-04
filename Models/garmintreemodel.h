@@ -53,22 +53,22 @@ public:
     enum DirRoles { NameRole = Qt::UserRole + 1, FullPathRole };
     Q_ENUM(DirRoles)
 
-    ///
-    /// \brief Search all connected volumes/devices for
-    /// 1. Garmin/GPX folder (lower or upper case) and
-    /// 2. GPX files (files with extension GPX - lower or upper case)
-    /// 3. Load the devices and the files in the tree model
-    ///
-    /// At start the tree model (children of the root) is cleared
-    ///
+    /**
+     * @brief  Search all connected volumes/devices for
+     * 1. Garmin/GPX folder (lower or upper case) and
+     * 2. GPX files (files with extension GPX - lower or upper case)
+     * 3. Load the devices and the files in the tree model
+     *
+     * At start the tree model (children of the root) is cleared
+     */
     void loadGarminDevices();
 
-    ///
-    /// \brief Extracts the full path of the GPX file selected in the treeview
-    /// \param index = QModelIndex returned by click event of the treeview
-    /// \return the full path of the selected GPX file
-    /// or QString() if a directory/volume has been selected
-    ///
+    /**
+     * @brief  Extracts the full path of the GPX file selected in the treeview
+     * @param index = QModelIndex returned by click event of the treeview
+     * @return the full path of the selected GPX file
+     *         or QString() if a directory/volume has been selected
+     */
     const QString getPathFromTreeNodeFromIndex(QModelIndex index) const;
 
     // ----- QAbstractItemModel interface ----
@@ -100,17 +100,24 @@ private:
     // Roles for displaying
     QHash<int, QByteArray> m_roles;
 
-    ///
-    /// \brief rread all gpx files (extension gpx) of a given directory
-    /// \param vol - GarminTreeNode with full path of a directory
-    /// \return true if gpx file is found, otherwise false
-    ///
+    /**
+     * @brief read all gpx files (extension gpx) of a given directory
+     *        and create GarminTreeNode for each gpx file
+     * @param vol - GarminTreeNode with full path of a directory
+     * @return true if gpx file is found, otherwise false
+     */
     bool readGpxFilesInFolder(const std::shared_ptr<GarminTreeNode> vol);
+    /**
+     * @brief read all fit files (extension fit) of a given directory
+     * @param vol - GarminTreeNode with full path of a directory
+     * @return true if fit file is found, otherwise false
+     */
+    bool readFitFilesInFolder(const std::shared_ptr<GarminTreeNode> vol) const;
 
-    ///
-    /// \brief points to the root of GarminTreeNodes
-    /// which store volumes with their gpx files in "Garmin/GPX" folder
-    ///
+    /**
+     * @brief points to the root of GarminTreeNodes
+     *        which store volumes with their gpx files in "Garmin/GPX" folder
+     */
     std::shared_ptr<GarminTreeNode> m_root;
 
     QString m_header; // Tree column header

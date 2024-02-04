@@ -45,7 +45,8 @@
 // #include "aboutdialog.h"
 
 Controller::Controller(GarminTreeModel &drives, const GpxTableModel &trks,
-                       const GpxTableModel &rtes, const GpxTableModel &wpts)
+                       const GpxTableModel &rtes, const GpxTableModel &wpts,
+                       const GpxTableModel &fits)
 {
     // connect models to table / tree views
     //    m_window.trkListView()->setModel(&m_trks);
@@ -63,11 +64,12 @@ Controller::Controller(GarminTreeModel &drives, const GpxTableModel &trks,
     m_trks = &trks;
     m_rtes = &rtes;
     m_wpts = &wpts;
+    m_fits = &fits;
     // Binding model changes to view
     connect(this, &Controller::onTrkModelChanged, m_trks, &GpxTableModel::upDateModel);
     connect(this, &Controller::onRteModelChanged, m_rtes, &GpxTableModel::upDateModel);
     connect(this, &Controller::onWptModelChanged, m_wpts, &GpxTableModel::upDateModel);
-
+    connect(this, &Controller::onFitModelChanged, m_fits, &GpxTableModel::upDateModel);
     // Connect all actions of main window
     //    connect(m_window.exitButton(), &QPushButton::clicked, &QCoreApplication::exit);
     //    connect(m_window.openGpxButton(), &QPushButton::clicked, this, &Controller::openGpxFile);
@@ -87,6 +89,7 @@ void Controller::loadGarminDirs()
     emit onTrkModelChanged(m_gpxFile.trkList());
     emit onWptModelChanged(m_gpxFile.wptList());
     emit onRteModelChanged(m_gpxFile.rteList());
+    emit onFitModelChanged(m_gpxFile.fitList());
 
     // expand garmin device tree
     //    QTreeView *deviceTree = m_window.devicesTreeView();
@@ -157,12 +160,14 @@ void Controller::showAboutDialog()
 void Controller::newGpxFileModelsUpdate(const QString &filename)
 {
     m_gpxFile.reset();
-    m_gpxFile.parse(filename);
+    m_gpxFile.parseGpxFile(filename);
     // TODO: Enable delete button
     // either use signal and slot to update the tableviews (bindings)
     emit onTrkModelChanged(m_gpxFile.trkList());
     emit onWptModelChanged(m_gpxFile.wptList());
     emit onRteModelChanged(m_gpxFile.rteList());
+    emit onFitModelChanged(m_gpxFile.rteList());
+
     // or update the tableviews directly
     //    m_trks.upDateModel(m_gpxFile.trkList());
     //    m_wpts.upDateModel(m_gpxFile.wptList());

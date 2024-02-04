@@ -53,11 +53,17 @@ class GarminGpxFile
 public:
     explicit GarminGpxFile();
 
-    ///
-    /// \brief Parses Garmin GPX file for routes, tracks and waypoints
-    /// \param file - an existing local filename with gpx/GPX extension
-    ///
-    void parse(const QString &filename);
+    /**
+     * @brief  Parses Garmin GPX file for routes, tracks and waypoints
+     * @param filename - an existing local filename with gpx/GPX extension
+     */
+    void parseGpxFile(const QString &filename);
+    /**
+     * @brief Reads the fit files in the given directory
+     * @param dirname - directory to look for fit files.
+     *        Name of dir should be 'Courses'
+     */
+    void readCourses(const QString &dirname);
 
     // Manipulate routes, tracks, waypoints, courses lists
     void appendRoute(const QString &route);
@@ -89,6 +95,9 @@ private:
 
     // fills trk, rte, wpt lists
     void listTrkRteFitWpt(QDomElement parent, GpxContentType type);
+
+    void resetGpxFile();
+    void resetCourses();
 
     // Content of gpx file
     QStringList m_trkList;

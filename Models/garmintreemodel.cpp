@@ -37,6 +37,7 @@
 ****************************************************************************/
 #include <QStorageInfo>
 #include <QDebug>
+#include <set>
 
 #include "garmintreemodel.h"
 
@@ -69,19 +70,31 @@ void GarminTreeModel::loadGarminDevices()
         // Check if a Garmin folder is at top level
         for (const auto &info : topLevelList) {
             if (QDir(info.absoluteFilePath()).dirName().toLower() == "garmin") {
+                // All volumes with garmin directory
                 QDir garminDir = QDir(info.absoluteFilePath());
                 garminDir.setFilter(QDir::Dirs | QDir::QDir::NoDotAndDotDot | QDir::NoSymLinks);
                 QFileInfoList garminFolderList = garminDir.entryInfoList();
 
-                // Check if a GPX folder is found in the Garmin folder
                 for (const auto &info : garminFolderList) {
-                    if (QDir(info.absoluteFilePath()).dirName().toLower() == "gpx") {
-                        auto gpxVol =
+                    QString subFolder{ QDir(info.absoluteFilePath()).dirName().toLower() };
+                    if (subFolder == "courses") {
+                        // process course folder
+                        auto volTreeNode = make_shared<GarminTreeNode>(
+                                vol.name() + tr(" (Courses)"), info.absoluteFilePath());
+                        // To avoid creating empty folders in the tree, check return of
+                        // readFitFilesInFolder
+                        if (readFitFilesInFolder(volTreeNode)) {
+                            m_root->appendChild(volTreeNode);
+                        }
+                    } else if (subFolder == "gpx") {
+                        // process gpx folder
+                        auto volTreeNode =
                                 make_shared<GarminTreeNode>(vol.name(), info.absoluteFilePath());
-                        // To avoid empty Garmin/GPX folders in the tree
-                        // call readGpxFilesInFolder
-                        if (readGpxFilesInFolder(gpxVol)) {
-                            m_root->appendChild(gpxVol);
+                        // for every gpx file, a tree node needs to be created
+                        // To avoid creating empty folders in the tree, check return of
+                        // readGpxFilesInFolder
+                        if (readGpxFilesInFolder(volTreeNode)) {
+                            m_root->appendChild(volTreeNode);
                         }
                     }
                 }
@@ -134,6 +147,19 @@ bool GarminTreeModel::readGpxFilesInFolder(const std::shared_ptr<GarminTreeNode>
         return true;
     else
         return false;
+}
+
+bool GarminTreeModel::readFitFilesInFolder(const std::shared_ptr<GarminTreeNode> vol) const
+{
+    QDir coursesDir = QDir(vol->fullPath());
+    coursesDir.setFilter(QDir::Files | QDir::NoDotDot | QDir::NoDot | QDir::NoSymLinks);
+    QFileInfoList fitFilesList = coursesDir.entryInfoList();
+    for (const QFileInfo &fitFile : fitFilesList) {
+        if (fitFile.suffix().toLower() == "fit") {
+            return true;
+        }
+    }
+    return false;
 }
 
 // ----- Debugging & Test ------

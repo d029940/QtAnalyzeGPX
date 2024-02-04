@@ -38,19 +38,21 @@
 #include <QDebug>
 #include <QDomDocument>
 #include <QFile>
+#include <QDir>
 
 #include "garmingpxfile.h"
 
 GarminGpxFile::GarminGpxFile() { }
 
 // NOTE: https://doc-snapshots.qt.io/qt6-6.4/xml-changes-qt6.html
-void GarminGpxFile::parse(const QString &filename)
+
+void GarminGpxFile::parseGpxFile(const QString &filename)
 {
     QFile file{ filename };
     m_fileName = filename;
     QDomDocument gpxFileDOM;
 
-    // Load the fike
+    // Load the file
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qDebug() << "Failed to open file " << file.fileName();
         qDebug() << "Error " << file.errorString();
@@ -71,10 +73,26 @@ void GarminGpxFile::parse(const QString &filename)
     listTrkRteFitWpt(root, trk);
     // Get waypoints
     listTrkRteFitWpt(root, wpt);
-    // Get courses
-    listTrkRteFitWpt(root, fit);
 
     file.close();
+}
+
+void GarminGpxFile::readCourses(const QString &dirname)
+{
+    m_fitList.clear();
+    QDir coursesDir = QDir(dirname);
+    if (!coursesDir.exists()) {
+        return;
+    }
+
+    coursesDir.setFilter(QDir::Files | QDir::NoDotDot | QDir::NoDot | QDir::NoSymLinks);
+    QFileInfoList coursesList = coursesDir.entryInfoList();
+    for (const QFileInfo &fitFile : coursesList) {
+        if (fitFile.suffix().toLower() == "fit") {
+            m_fitList.push_back(fitFile.baseName());
+            ;
+        }
+    }
 }
 
 // ----- Manipulate routes, tracks, waypoints lists ----
@@ -101,10 +119,20 @@ void GarminGpxFile::appendWaypoint(const QString &waypoint)
 
 void GarminGpxFile::reset()
 {
+    resetGpxFile();
+    resetCourses();
+}
+
+void GarminGpxFile::resetGpxFile()
+{
     m_rteList.clear();
     m_trkList.clear();
-    m_fitList.clear();
     m_wptList.clear();
+}
+
+void GarminGpxFile::resetCourses()
+{
+    m_fitList.clear();
 }
 
 // ----- Getters and setters  -----
