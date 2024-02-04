@@ -68,6 +68,11 @@ QPushButton *MainWindow::deleteGpxButton() const
     return ui->deleteGpxButton;
 }
 
+QPushButton *MainWindow::deleteFitButton() const
+{
+    return ui->deleteFitButton;
+}
+
 QAction *MainWindow::actionAbout() const
 {
     return ui->actionAbout;

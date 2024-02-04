@@ -63,9 +63,13 @@ public slots:
      */
     void openGpxFile();
     /**
-     * @brief deletes selected gpxfile from disc.
+     * @brief deletes selected gpx file from disc.
      */
     void deleteGpxFile();
+    /**
+     * @brief deletes selected fit file from disc.
+     */
+    void deleteFitFile();
     /**
      * @brief if a gpx file is selected, the tables tracks, routes and waypoints are populated
      *        with resp. info from gpx file.

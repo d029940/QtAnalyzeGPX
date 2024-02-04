@@ -67,6 +67,7 @@ Controller::Controller()
     connect(m_window.exitButton(), &QPushButton::clicked, &QCoreApplication::exit);
     connect(m_window.openGpxButton(), &QPushButton::clicked, this, &Controller::openGpxFile);
     connect(m_window.deleteGpxButton(), &QPushButton::clicked, this, &Controller::deleteGpxFile);
+    connect(m_window.deleteFitButton(), &QPushButton::clicked, this, &Controller::deleteFitFile);
     connect(m_window.loadGpxButton(), &QPushButton::clicked, this, &Controller::loadGarminDirs);
 
     connect(m_window.actionAbout(), &QAction::triggered, this, &Controller::showAboutDialog);
@@ -114,6 +115,22 @@ void Controller::deleteGpxFile()
     }
 }
 
+void Controller::deleteFitFile()
+{
+    // Get current selection is different in QMS and Widgets
+    QModelIndexList indices = m_window.fitListView()->selectionModel()->selectedIndexes();
+    if (indices.isEmpty())
+        return;
+    QString fitFileWithout = indices.front().data().toString() + ".fit";
+
+    // TODO: Need to find the full path
+    qDebug() << "Not implemented yet";
+
+    // if (QFile::remove(fitFileWithout->fullPath())) {
+    //     loadGarminDirs();
+    // }
+}
+
 // Widget dependant
 void Controller::garminNodeSelected(const QItemSelection &selected,
                                     const QItemSelection &deselected)
@@ -146,17 +163,26 @@ void Controller::showAboutDialog()
 
 void Controller::updateUI()
 {
+    // update the table views
     emit onTrkModelChanged(m_gpxFile.trkList());
     emit onWptModelChanged(m_gpxFile.wptList());
     emit onRteModelChanged(m_gpxFile.rteList());
     emit onFitModelChanged(m_gpxFile.fitList());
 
-    // Check status of buttons
+    // Check status of "Delete GPX" button
     if (!m_gpxFile.trkList().isEmpty() || !m_gpxFile.rteList().isEmpty()
         || !m_gpxFile.wptList().isEmpty()) {
         m_window.deleteGpxButton()->setDisabled(false);
     } else {
         m_window.deleteGpxButton()->setDisabled(true);
+    }
+
+    // Check status of "Delete FIT" button
+    // TODO: Check also if a fit file is selected
+    if (m_gpxFile.fitList().isEmpty()) {
+        m_window.deleteFitButton()->setDisabled(true);
+    } else {
+        m_window.deleteFitButton()->setDisabled(false);
     }
 }
 
