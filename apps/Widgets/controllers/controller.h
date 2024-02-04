@@ -40,6 +40,7 @@
 #include <QObject>
 #include "mainwindow.h"
 #include "garmingpxfile.h"
+#include "garminfitfile.h"
 #include "gpxtablemodel.h"
 #include "garmintreemodel.h"
 
@@ -81,6 +82,8 @@ public slots:
     void garminNodeSelected(const QItemSelection &selected, const QItemSelection &deselected);
     void showAboutDialog();
 
+    void reset();
+
 signals:
     void onTrkModelChanged(const QStringList &newItems);
     void onRteModelChanged(const QStringList &newItems);
@@ -89,11 +92,15 @@ signals:
 
 private:
     MainWindow m_window;
-    GarminGpxFile m_gpxFile{}; // Current GPX file and courses shown in table views
-    GpxTableModel m_trks{ tr("Tracks") }; // Table view for tracks
-    GpxTableModel m_rtes{ tr("Routes") }; // Table view for routes
-    GpxTableModel m_wpts{ tr("Waypoints") }; // Table view for waypoints (POIs)
-    GpxTableModel m_fits{ tr("Courses") }; // Table view for waypoints (POIs)
+    GarminGpxFile m_gpxFile{}; // Current GPX file shown in table views
+    GarminFitFile m_fitFiles{}; // Current courses shown in table view
+
+    GpxTableModel m_trks{ GpxTableModel::ContentType::trk, tr("Tracks") }; // Table view for tracks
+    GpxTableModel m_rtes{ GpxTableModel::ContentType::rte, tr("Routes") }; // Table view for routes
+    GpxTableModel m_wpts{ GpxTableModel::ContentType::wpt,
+                          tr("Waypoints") }; // Table view for waypoints (POIs)
+    GpxTableModel m_fits{ GpxTableModel::ContentType::fit,
+                          tr("Courses") }; // Table view for waypoints (POIs)
     GarminTreeModel m_drives{ tr("Drives") }; // Drives recognized by Garmin gps
 
     void newGpxFileModelsUpdate(

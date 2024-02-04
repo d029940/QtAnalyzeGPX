@@ -68,31 +68,13 @@ void GarminGpxFile::parseGpxFile(const QString &filename)
     // Get the root element
     QDomElement root = gpxFileDOM.firstChildElement();
     // Get routes
-    listTrkRteFitWpt(root, rte);
+    listTrkRteWpt(root, rte);
     // Get tracks
-    listTrkRteFitWpt(root, trk);
+    listTrkRteWpt(root, trk);
     // Get waypoints
-    listTrkRteFitWpt(root, wpt);
+    listTrkRteWpt(root, wpt);
 
     file.close();
-}
-
-void GarminGpxFile::readCourses(const QString &dirname)
-{
-    m_fitList.clear();
-    QDir coursesDir = QDir(dirname);
-    if (!coursesDir.exists()) {
-        return;
-    }
-
-    coursesDir.setFilter(QDir::Files | QDir::NoDotDot | QDir::NoDot | QDir::NoSymLinks);
-    QFileInfoList coursesList = coursesDir.entryInfoList();
-    for (const QFileInfo &fitFile : coursesList) {
-        if (fitFile.suffix().toLower() == "fit") {
-            m_fitList.push_back(fitFile.baseName());
-            ;
-        }
-    }
 }
 
 // ----- Manipulate routes, tracks, waypoints lists ----
@@ -107,20 +89,9 @@ void GarminGpxFile::appendTrack(const QString &track)
     m_trkList.append(track);
 }
 
-void GarminGpxFile::appendCourses(const QString &course)
-{
-    m_fitList.append(course);
-}
-
 void GarminGpxFile::appendWaypoint(const QString &waypoint)
 {
     m_wptList.append(waypoint);
-}
-
-void GarminGpxFile::reset()
-{
-    resetGpxFile();
-    resetCourses();
 }
 
 void GarminGpxFile::resetGpxFile()
@@ -128,11 +99,6 @@ void GarminGpxFile::resetGpxFile()
     m_rteList.clear();
     m_trkList.clear();
     m_wptList.clear();
-}
-
-void GarminGpxFile::resetCourses()
-{
-    m_fitList.clear();
 }
 
 // ----- Getters and setters  -----
@@ -167,16 +133,6 @@ void GarminGpxFile::setWptList(const QStringList &wptList)
     m_wptList = wptList;
 }
 
-QStringList GarminGpxFile::fitList() const
-{
-    return m_fitList;
-}
-
-void GarminGpxFile::setFitList(const QStringList &newFitList)
-{
-    m_fitList = newFitList;
-}
-
 QString GarminGpxFile::fileName() const
 {
     return m_fileName;
@@ -184,7 +140,7 @@ QString GarminGpxFile::fileName() const
 
 // ----- Role names for displaying in the model ---------
 
-void GarminGpxFile::listTrkRteFitWpt(QDomElement parent, GpxContentType type)
+void GarminGpxFile::listTrkRteWpt(QDomElement parent, GpxContentType type)
 {
     QString tagName;
     QStringList *list = nullptr;
@@ -202,11 +158,6 @@ void GarminGpxFile::listTrkRteFitWpt(QDomElement parent, GpxContentType type)
     case wpt: {
         tagName = m_tagNames[wpt];
         list = &m_wptList;
-        break;
-    }
-    case fit: {
-        tagName = m_tagNames[fit];
-        list = &m_fitList;
         break;
     }
     }

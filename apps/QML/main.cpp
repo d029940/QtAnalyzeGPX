@@ -14,10 +14,14 @@ int main(int argc, char *argv[])
 
     // Create Models
     GarminTreeModel garminDrives{ GarminTreeModel::tr("Drives") };
-    GpxTableModel tracks{ GpxTableModel::tr("Tracks") }; // Table view for tracks
-    GpxTableModel routes{ GpxTableModel::tr("Routes") }; // Table view for routes
-    GpxTableModel courses{ GpxTableModel::tr("Courses") }; // Table view for routes
-    GpxTableModel waypoints{ GpxTableModel::tr("Waypoints") }; // Table view for waypoints (POIs)
+    GpxTableModel tracks{ GpxTableModel::ContentType::trk,
+                          GpxTableModel::tr("Tracks") }; // Table view for tracks
+    GpxTableModel routes{ GpxTableModel::ContentType::rte,
+                          GpxTableModel::tr("Routes") }; // Table view for routes
+    GpxTableModel courses{ GpxTableModel::ContentType::fit,
+                           GpxTableModel::tr("Courses") }; // Table view for routes
+    GpxTableModel waypoints{ GpxTableModel::ContentType::wpt,
+                             GpxTableModel::tr("Waypoints") }; // Table view for waypoints (POIs)
 
     // Controller
     Controller mainController(garminDrives, tracks, routes, waypoints, courses);

@@ -85,11 +85,11 @@ Controller::Controller(GarminTreeModel &drives, const GpxTableModel &trks,
 void Controller::loadGarminDirs()
 {
     m_drives->loadGarminDevices();
-    m_gpxFile.reset();
+    reset();
     emit onTrkModelChanged(m_gpxFile.trkList());
     emit onWptModelChanged(m_gpxFile.wptList());
     emit onRteModelChanged(m_gpxFile.rteList());
-    emit onFitModelChanged(m_gpxFile.fitList());
+    emit onFitModelChanged(m_fitFiles.fitList());
 
     // expand garmin device tree
     //    QTreeView *deviceTree = m_window.devicesTreeView();
@@ -156,10 +156,16 @@ void Controller::showAboutDialog()
     //    dlg.exec();
 }
 
+void Controller::reset()
+{
+    m_gpxFile.resetGpxFile();
+    m_fitFiles.resetCourses();
+}
+
 // UI independent
 void Controller::newGpxFileModelsUpdate(const QString &filename)
 {
-    m_gpxFile.reset();
+    reset();
     m_gpxFile.parseGpxFile(filename);
     // TODO: Enable delete button
     // either use signal and slot to update the tableviews (bindings)

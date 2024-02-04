@@ -37,8 +37,8 @@
 ****************************************************************************/
 #include "gpxtablemodel.h"
 
-GpxTableModel::GpxTableModel(const QString &header, QObject *parent)
-    : m_header(header), QAbstractTableModel(parent)
+GpxTableModel::GpxTableModel(ContentType content, const QString &header, QObject *parent)
+    : m_contentType(content), m_header(header), QAbstractTableModel(parent)
 {
 }
 

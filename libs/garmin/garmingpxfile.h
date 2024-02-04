@@ -58,20 +58,13 @@ public:
      * @param filename - an existing local filename with gpx/GPX extension
      */
     void parseGpxFile(const QString &filename);
-    /**
-     * @brief Reads the fit files in the given directory
-     * @param dirname - directory to look for fit files.
-     *        Name of dir should be 'Courses'
-     */
-    void readCourses(const QString &dirname);
 
     // Manipulate routes, tracks, waypoints, courses lists
     void appendRoute(const QString &route);
     void appendTrack(const QString &track);
-    void appendCourses(const QString &course);
     void appendWaypoint(const QString &waypoint);
 
-    void reset();
+    void resetGpxFile();
 
     // Getters and setters for tracks, routes and waypoints
     QStringList trkList() const;
@@ -83,26 +76,21 @@ public:
     QStringList wptList() const;
     void setWptList(const QStringList &wptList);
 
-    QStringList fitList() const;
-    void setFitList(const QStringList &newFitList);
-
     QString fileName() const;
 
 private:
     // Tag names in Garmin GPX files
-    enum GpxContentType { rte = 0, trk, wpt, fit };
-    QStringList m_tagNames{ "rte", "trk", "wpt", "fit" };
+    enum GpxContentType { rte = 0, trk, wpt };
+    QStringList m_tagNames{ "rte", "trk", "wpt" };
 
     // fills trk, rte, wpt lists
-    void listTrkRteFitWpt(QDomElement parent, GpxContentType type);
-
-    void resetGpxFile();
-    void resetCourses();
+    void listTrkRteWpt(QDomElement parent, GpxContentType type);
 
     // Content of gpx file
     QStringList m_trkList;
     QStringList m_rteList;
-    QStringList m_fitList;
+    // TOFO: delete
+    // QStringList m_fitList;
     QStringList m_wptList;
 
     // Filename

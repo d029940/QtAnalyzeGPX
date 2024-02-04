@@ -44,7 +44,10 @@ class GpxTableModel : public QAbstractTableModel
     Q_OBJECT
 
 public:
-    explicit GpxTableModel(const QString &header = "", QObject *parent = nullptr);
+    enum ContentType { rte = 0, trk, wpt, fit };
+
+    explicit GpxTableModel(ContentType content, const QString &header = "",
+                           QObject *parent = nullptr);
 
     enum Roles { NameRole = Qt::UserRole + 1 };
     Q_ENUM(Roles)
@@ -71,6 +74,7 @@ public slots:
     void upDateModel(const QStringList &newItems);
 
 private:
+    ContentType m_contentType;
     QStringList m_items;
     QString m_header;
 };

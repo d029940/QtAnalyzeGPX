@@ -35,9 +35,55 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
 **
 ****************************************************************************/
+#include <QDir>
+
 #include "garminfitfile.h"
 
-GarminFitFile::GarminFitFile(const QString &dirName)
+GarminFitFile::GarminFitFile()
 {
     // look for all files with extension "fit" in directory and collect them
+}
+
+void GarminFitFile::resetCourses()
+{
+    m_fitList.clear();
+}
+
+void GarminFitFile::readCourses(const QString &dirname)
+{
+    m_fitList.clear();
+    QDir coursesDir = QDir(dirname);
+    if (!coursesDir.exists()) {
+        return;
+    }
+
+    m_dirName = dirname;
+    coursesDir.setFilter(QDir::Files | QDir::NoDotDot | QDir::NoDot | QDir::NoSymLinks);
+    QFileInfoList coursesList = coursesDir.entryInfoList();
+    for (const QFileInfo &fitFile : coursesList) {
+        if (fitFile.suffix().toLower() == GarminFitFile::fitExt) {
+            m_fitList.push_back(fitFile.fileName());
+            ;
+        }
+    }
+}
+
+void GarminFitFile::appendCourses(const QString &course)
+{
+    m_fitList.append(course);
+}
+
+QStringList GarminFitFile::fitList() const
+{
+    return m_fitList;
+}
+
+void GarminFitFile::setFitList(const QStringList &newFitList)
+{
+    m_fitList = newFitList;
+}
+
+QString GarminFitFile::dirName() const
+{
+    return m_dirName;
 }

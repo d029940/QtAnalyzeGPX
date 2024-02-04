@@ -42,10 +42,32 @@
 class GarminFitFile
 {
 public:
-    GarminFitFile(const QString &dirName);
+    explicit GarminFitFile();
+
+    inline static const QString fitExt = "fit";
+
+    /**
+     * @brief Reads the fit files in the given directory
+     * @param dirname - directory to look for fit files.
+     *        Name of dir should be 'Courses'
+     */
+    void readCourses(const QString &dirname);
+
+    // Manipulate courses lists
+    void appendCourses(const QString &course);
+
+    void resetCourses();
+
+    // Getters and setters for tracks, routes and waypoints
+    QStringList fitList() const;
+    void setFitList(const QStringList &newFitList);
+
+    QString dirName() const;
 
 private:
     // List of fit (course) files
-    QStringList m_fitList;
+    QStringList m_fitList{};
+    QString m_dirName{};
+    QString m_ext{ "fit" };
 };
 

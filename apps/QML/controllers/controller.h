@@ -40,6 +40,7 @@
 #include <QObject>
 // #include "mainwindow.h"
 #include "garmingpxfile.h"
+#include "garminfitfile.h"
 #include "gpxtablemodel.h"
 #include "garmintreemodel.h"
 
@@ -60,6 +61,8 @@ public slots:
     //    void gpxFileSelected(const QItemSelection &selected, const QItemSelection &deselected);
     void showAboutDialog();
 
+    void reset();
+
 signals:
     void onTrkModelChanged(const QStringList &newItems);
     void onRteModelChanged(const QStringList &newItems);
@@ -69,6 +72,7 @@ signals:
 private:
     //    MainWindow m_window;
     GarminGpxFile m_gpxFile{}; // Current GPX file shown in table views
+    GarminFitFile m_fitFiles{}; // Current courses shown in table view
     const GpxTableModel *m_trks; // Table view for tracks
     const GpxTableModel *m_rtes; // Table view for routes
     const GpxTableModel *m_wpts; // Table view for waypoints (POIs)
