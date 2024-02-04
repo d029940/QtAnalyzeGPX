@@ -37,7 +37,6 @@
 ****************************************************************************/
 #include <QStorageInfo>
 #include <QDebug>
-#include <set>
 
 #include "garmintreemodel.h"
 
