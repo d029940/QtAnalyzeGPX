@@ -122,11 +122,14 @@ void Controller::gpxFileSelected(const QItemSelection &selected, const QItemSele
     if (selected.indexes().isEmpty())
         m_window.deleteGpxButton()->setDisabled(true);
     else {
+        // TODO: Adjustment for courses needed:
+        // Whenever a volume node is selected / expanded, course table needs update
         auto gpxFile = static_cast<GarminTreeNode *>(selected.indexes().front().internalPointer());
         if (gpxFile->childCount() == 0) {
             // Existing GPX file selected
             m_window.deleteGpxButton()->setDisabled(false);
             newGpxFileModelsUpdate(gpxFile->fullPath());
+            // TODO: Also update course table from parent volume
 
         } else {
             m_window.deleteGpxButton()->setDisabled(true);
