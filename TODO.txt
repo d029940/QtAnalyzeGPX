@@ -1,5 +1,4 @@
--	Icons (MacOS done)
--	Resources
+-	Linux version of the "widget" version
 -	Deployment / Installer (MacOs done)
 -	Translation
 
