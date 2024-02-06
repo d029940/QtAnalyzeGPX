@@ -101,20 +101,6 @@ private:
     QHash<int, QByteArray> m_roles;
 
     /**
-     * @brief read all gpx files (extension gpx) of a given directory
-     *        and create GarminTreeNode for each gpx file
-     * @param vol - GarminTreeNode with full path of a directory
-     * @return true if gpx file is found, otherwise false
-     */
-    bool readGpxFilesInFolder(const std::shared_ptr<GarminTreeNode> vol);
-    /**
-     * @brief read all fit files (extension fit) of a given directory
-     * @param vol - GarminTreeNode with full path of a directory
-     * @return true if fit file is found, otherwise false
-     */
-    bool readFitFilesInFolder(const std::shared_ptr<GarminTreeNode> vol) const;
-
-    /**
      * @brief points to the root of GarminTreeNodes
      *        which store volumes with their gpx files in "Garmin/GPX" folder
      */

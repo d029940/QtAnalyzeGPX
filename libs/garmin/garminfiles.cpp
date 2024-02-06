@@ -6,17 +6,26 @@
 namespace fs = std::filesystem;
 using namespace std;
 
-GarminFiles::GarminFiles(const QString &volRootPath) : m_volRootPath(volRootPath) { }
+GarminFiles::GarminFiles(const QString &volRootPath)
+    : m_volRootPath(volRootPath),
+      m_gpxPath{ m_volRootPath + "/" + kGarminPath + "/" + kGpxPath },
+      m_coursesPath{ m_volRootPath + "/" + kGarminPath + "/" + kCoursesPath }
+{
+}
 
 void GarminFiles::find()
 {
     // reading gpx files
-    QString gpx_path{ m_volRootPath + "/" + kGarminPath + "/" + kGpxPath };
-    findFilesInDir(gpx_path, m_gpxFiles, kGpxExt);
+    QDir path = QDir(m_gpxPath);
+    if (path.exists()) {
+        findFilesInDir(m_gpxPath, m_gpxFiles, kGpxExt);
+    }
 
     // reading fit files
-    QString courses_path{ m_volRootPath + "/" + kGarminPath + "/" + kCoursesPath };
-    findFilesInDir(courses_path, m_courseFiles, kCoursesExt);
+    path = QDir(m_coursesPath);
+    if (path.exists()) {
+        findFilesInDir(m_coursesPath, m_courseFiles, kCoursesExt);
+    }
 }
 
 std::vector<QString> GarminFiles::gpxFiles() const
@@ -27,6 +36,19 @@ std::vector<QString> GarminFiles::gpxFiles() const
 std::vector<QString> GarminFiles::courseFiles() const
 {
     return m_courseFiles;
+}
+
+void GarminFiles::print() const
+{
+    qDebug() << "GPX files on: " << m_volRootPath;
+    for (const QString &file : m_gpxFiles) {
+        qDebug() << "  " << file;
+    }
+    qDebug() << "Course files on: " << m_volRootPath;
+    for (const QString &file : m_courseFiles) {
+        qDebug() << "  " << file;
+    }
+    qDebug() << Qt::endl;
 }
 
 void GarminFiles::findFilesInDir(const QString &path, std::vector<QString> &fileCollection,
@@ -43,4 +65,19 @@ void GarminFiles::findFilesInDir(const QString &path, std::vector<QString> &file
             fileCollection.push_back(file.absoluteFilePath());
         }
     }
+}
+
+QString GarminFiles::volRootPath() const
+{
+    return m_volRootPath;
+}
+
+QString GarminFiles::gpxPath() const
+{
+    return m_gpxPath;
+}
+
+QString GarminFiles::coursesPath() const
+{
+    return m_coursesPath;
 }

@@ -17,14 +17,23 @@ public:
     void find();
 
     std::vector<QString> gpxFiles() const;
-
     std::vector<QString> courseFiles() const;
+
+    void print() const;
+
+    QString coursesPath() const;
+
+    QString volRootPath() const;
+
+    QString gpxPath() const;
 
 private:
     void findFilesInDir(const QString &path, std::vector<QString> &fileCollection,
                         const QString &ext);
 
     const QString m_volRootPath;
+    const QString m_gpxPath;
+    const QString m_coursesPath;
     std::vector<QString> m_gpxFiles;
     std::vector<QString> m_courseFiles;
 };
