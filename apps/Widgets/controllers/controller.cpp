@@ -113,7 +113,8 @@ void Controller::deleteGpxFile()
         return;
 
     auto gpxFile = static_cast<GarminTreeNode *>(indices.front().internalPointer());
-    if (QFile::moveToTrash(gpxFile->fullPath())) {
+    if (QFile::moveToTrash(gpxFile->fullPath()) || QFile::remove(gpxFile->fullPath())) {
+        // 1st try to move to trash bin. On drives w/o a trash bin delete the file
         loadGarminDirs();
     }
 }
@@ -126,7 +127,8 @@ void Controller::deleteFitFile()
         return;
 
     QString filename = m_fitFiles.dirName() + "/" + indices.front().data().toString();
-    if (QFile::moveToTrash(filename)) {
+    if (QFile::moveToTrash(filename) || QFile::remove(filename)) {
+        // 1st try to move to trash bin. On drives w/o a trash bin delete the file
         loadGarminDirs();
         newCoursesModelsUpdate(m_fitFiles.dirName());
     }
