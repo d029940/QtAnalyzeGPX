@@ -1,28 +1,30 @@
 #pragma once
 
-#include <string>
 #include <vector>
-
+#include <QString>
 class GarminFiles
 {
 public:
-    GarminFiles(const std::string &volRootPath);
+    GarminFiles(const QString &volRootPath);
+
+    // Constants for file paths
+    inline static const QString kGarminPath{ "Garmin" };
+    inline static const QString kGpxPath{ "GPX" };
+    inline static const QString kCoursesPath{ "Courses" };
+    inline static const QString kGpxExt{ "gpx" };
+    inline static const QString kCoursesExt{ "fit" };
+
     void find();
 
-    std::vector<std::string> gpxFiles() const;
+    std::vector<QString> gpxFiles() const;
 
-    std::vector<std::string> courseFiles() const;
+    std::vector<QString> courseFiles() const;
 
 private:
-    void findFilesInDir(const std::string &path, std::vector<std::string> &fileCollection,
-                        const std::string &ext);
+    void findFilesInDir(const QString &path, std::vector<QString> &fileCollection,
+                        const QString &ext);
 
-    static const std::string kGarminPath;
-    static const std::string kGpxPath;
-    static const std::string kCoursesPath;
-    static const std::string kGpxExt;
-    static const std::string kCoursesExt;
-    const std::string m_volRootPath;
-    std::vector<std::string> m_gpxFiles;
-    std::vector<std::string> m_courseFiles;
+    const QString m_volRootPath;
+    std::vector<QString> m_gpxFiles;
+    std::vector<QString> m_courseFiles;
 };

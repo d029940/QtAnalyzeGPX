@@ -80,6 +80,7 @@ public slots:
      * @param deselected - node used
      */
     void garminNodeSelected(const QItemSelection &selected, const QItemSelection &deselected);
+    void garminTableItemSelected(const QItemSelection &selected, const QItemSelection &deselected);
     void showAboutDialog();
 
     void reset();

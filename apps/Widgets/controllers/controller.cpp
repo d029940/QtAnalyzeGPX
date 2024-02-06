@@ -42,6 +42,7 @@
 #include <QStandardPaths>
 
 #include "aboutdialog.h"
+#include "garminfiles.h"
 
 Controller::Controller()
 {
@@ -56,6 +57,8 @@ Controller::Controller()
     // assigned before)
     connect(m_window.devicesTreeView()->selectionModel(), &QItemSelectionModel::selectionChanged,
             this, &Controller::garminNodeSelected);
+    connect(m_window.fitListView()->selectionModel(), &QItemSelectionModel::selectionChanged, this,
+            &Controller::garminTableItemSelected);
 
     // Binding model changes to view
     connect(this, &Controller::onTrkModelChanged, &m_trks, &GpxTableModel::upDateModel);
@@ -139,7 +142,7 @@ void Controller::garminNodeSelected(const QItemSelection &selected,
         auto node = static_cast<GarminTreeNode *>(selected.indexes().front().internalPointer());
         if (node->childCount() == 0) {
             // Could be the node for the courses directory or a gpx file
-            if (node->fullPath().toLower().endsWith("/courses")) {
+            if (node->fullPath().toLower().endsWith("/" + GarminFiles::kCoursesPath.toLower())) {
                 // course node
                 newCoursesModelsUpdate(node->fullPath());
             } else {
@@ -151,6 +154,17 @@ void Controller::garminNodeSelected(const QItemSelection &selected,
             updateUI();
         }
     }
+}
+
+void Controller::garminTableItemSelected(const QItemSelection &selected,
+                                         const QItemSelection &deselected)
+{
+    // Check also if a fit file is selected
+    QModelIndexList indices = m_window.fitListView()->selectionModel()->selectedIndexes();
+    if (indices.isEmpty())
+        m_window.deleteFitButton()->setDisabled(true);
+    else
+        m_window.deleteFitButton()->setDisabled(false);
 }
 
 void Controller::showAboutDialog()

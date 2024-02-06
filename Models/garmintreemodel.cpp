@@ -39,6 +39,7 @@
 #include <QDebug>
 
 #include "garmintreemodel.h"
+#include "garminfiles.h"
 
 using namespace std;
 
@@ -68,7 +69,9 @@ void GarminTreeModel::loadGarminDevices()
 
         // Check if a Garmin folder is at top level
         for (const auto &info : topLevelList) {
-            if (QDir(info.absoluteFilePath()).dirName().toLower() == "garmin") {
+            // TODO: replace garmin by constant
+            if (QDir(info.absoluteFilePath()).dirName().toLower()
+                == GarminFiles::kGarminPath.toLower()) {
                 // All volumes with garmin directory
                 QDir garminDir = QDir(info.absoluteFilePath());
                 garminDir.setFilter(QDir::Dirs | QDir::QDir::NoDotAndDotDot | QDir::NoSymLinks);
@@ -76,7 +79,7 @@ void GarminTreeModel::loadGarminDevices()
 
                 for (const auto &info : garminFolderList) {
                     QString subFolder{ QDir(info.absoluteFilePath()).dirName().toLower() };
-                    if (subFolder == "courses") {
+                    if (subFolder == GarminFiles::kCoursesPath.toLower()) {
                         // process course folder
                         auto volTreeNode = make_shared<GarminTreeNode>(
                                 vol.name() + tr(" (Courses)"), info.absoluteFilePath());
@@ -85,7 +88,7 @@ void GarminTreeModel::loadGarminDevices()
                         if (readFitFilesInFolder(volTreeNode)) {
                             m_root->appendChild(volTreeNode);
                         }
-                    } else if (subFolder == "gpx") {
+                    } else if (subFolder == GarminFiles::kGpxPath.toLower()) {
                         // process gpx folder
                         auto volTreeNode =
                                 make_shared<GarminTreeNode>(vol.name(), info.absoluteFilePath());

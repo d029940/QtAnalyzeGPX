@@ -38,6 +38,7 @@
 #include <QDir>
 
 #include "garminfitfile.h"
+#include "garminfiles.h"
 
 GarminFitFile::GarminFitFile()
 {
@@ -57,11 +58,12 @@ void GarminFitFile::readCourses(const QString &dirname)
         return;
     }
 
+    QString ext{ GarminFiles::kCoursesExt.toLower() };
     m_dirName = dirname;
     coursesDir.setFilter(QDir::Files | QDir::NoDotDot | QDir::NoDot | QDir::NoSymLinks);
     QFileInfoList coursesList = coursesDir.entryInfoList();
     for (const QFileInfo &fitFile : coursesList) {
-        if (fitFile.suffix().toLower() == GarminFitFile::fitExt) {
+        if (fitFile.suffix().toLower() == ext) {
             m_fitList.push_back(fitFile.fileName());
             ;
         }

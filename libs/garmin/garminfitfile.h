@@ -44,8 +44,6 @@ class GarminFitFile
 public:
     explicit GarminFitFile();
 
-    inline static const QString fitExt = "fit";
-
     /**
      * @brief Reads the fit files in the given directory
      * @param dirname - directory to look for fit files.
