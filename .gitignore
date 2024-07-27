@@ -125,3 +125,6 @@ compile_commands.json
 *creator.user*
 
 *_qmlcache.qrc
+
+# QtCreator/CMake build directory
+/build

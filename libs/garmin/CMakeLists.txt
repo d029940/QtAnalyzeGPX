@@ -1,3 +1,4 @@
+cmake_minimum_required(VERSION 3.29)
 project(
   GarminGPX_Lib
   VERSION 0.1
@@ -7,8 +8,10 @@ project(
 # ##############################################################################
 # GPX lib
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Xml)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Xml)
+find_package(Qt6 REQUIRED COMPONENTS Xml)
+
+# find_package(QT NAMES Qt6 REQUIRED COMPONENTS Xml) find_package(Qt6 REQUIRED
+# COMPONENTS Xml)
 
 # Alternative: https://pugixml.org, C++ string, filesystem fstream
 

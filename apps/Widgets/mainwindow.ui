@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Analyze Garmin GPX files</string>
+   <string>Show Garmin GPX &amp; FIT files</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -120,7 +120,7 @@
      <x>0</x>
      <y>0</y>
      <width>1048</width>
-     <height>25</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp">
