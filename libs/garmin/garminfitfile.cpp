@@ -14,7 +14,7 @@
 **    documentation and/or other materials provided with the distribution.
 **
 ** 3. All advertising materials mentioning features or use of this software
-**    must display the following acknowledgement:
+**    must display the following acknowledged:
 **    This product includes software developed by the the organization.
 **
 ** 4. Neither the name of the copyright holder nor the names of its
@@ -62,7 +62,7 @@ void GarminFitFile::readCourses(const QString &dirname)
     m_dirName = dirname;
     coursesDir.setFilter(QDir::Files | QDir::NoDotDot | QDir::NoDot | QDir::NoSymLinks);
     QFileInfoList coursesList = coursesDir.entryInfoList();
-    for (const QFileInfo &fitFile : coursesList) {
+    for (const QFileInfo &fitFile : std::as_const(coursesList)) {
         if (fitFile.suffix().toLower() == ext) {
             m_fitList.push_back(fitFile.fileName());
             ;

@@ -60,7 +60,7 @@ void GarminFiles::findFilesInDir(const QString &path, std::vector<QString> &file
     pathDir.setFilter(QDir::Files | QDir::QDir::NoDotAndDotDot | QDir::NoSymLinks);
     QFileInfoList fileList = pathDir.entryInfoList();
 
-    for (const QFileInfo &file : fileList) {
+    for (const QFileInfo &file : std::as_const(fileList)) {
         if (file.suffix().toLower() == ext.toLower()) {
             fileCollection.push_back(file.absoluteFilePath());
         }

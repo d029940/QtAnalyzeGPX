@@ -70,7 +70,7 @@ QString Licenses::readLicences()
     QString licenseText;
 
     QFile licenseFile;
-    for (const QString &item : infoList) {
+    for (const QString &item : std::as_const(infoList)) {
         licenseText += "\n";
         licenseFile.setFileName(resDir + "/" + item);
         licenseFile.open(QIODevice::ReadOnly | QIODevice::Text);

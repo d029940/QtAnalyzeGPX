@@ -1,0 +1,107 @@
+ccmake_minimum_required(VERSION 3.29)
+project(
+  AnalyzeGPX_Widgets
+  VERSION 0.1
+  DESCRIPTION "Analyze Garmin GPX files (Widget Version)"
+  LANGUAGES CXX)
+
+configure_file(AnalyzeGPX_Widgets_config.h.in AnalyzeGPX_Widgets_config.h)
+
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+
+find_package(QT NAMES Qt6 REQUIRED COMPONENTS Widgets)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+
+set(PROJECT_SOURCES
+    main.cpp
+    mainwindow.cpp
+    mainwindow.h
+    mainwindow.ui
+    controllers/controller.h
+    controllers/controller.cpp
+    aboutdialog.h
+    aboutdialog.cpp
+    aboutdialog.ui)
+
+print(APP_RESOUCRE_DIR)
+if(APPLE)
+  # MacOS app icon
+  set(MACOSX_BUNDLE_ICON_FILE appicon.icns)
+  set(app_icon_macos "${APP_RESOUCRE_DIR}/icons/appicon.icns")
+  set_source_files_properties(${app_icon_macos}
+                              PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+else(APPLE)
+  # Windows app icon
+  set(app_icon_win "${APP_RESOUCRE_DIR}/win.rc")
+  print(app_icon_win)
+endif(APPLE)
+
+# Licenses of the app
+set(licenses "${APP_RESOUCRE_DIR}/Licenses/01_License_BSD-4.txt")
+if(APPLE)
+  set_source_files_properties(${licenses} PROPERTIES MACOSX_PACKAGE_LOCATION
+                                                     "Resources")
+endif(APPLE)
+
+# Define executable
+if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
+  if(APPLE)
+    qt_add_executable(${PROJECT_NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES}
+                      ${app_icon_macos} ${licenses})
+  else()
+    # Windows needs a resource file for the app icon
+    # https://doc-snapshots.qt.io/qt6-6.4/appicon.html
+    qt_add_executable(${PROJECT_NAME} MANUAL_FINALIZATION ${PROJECT_SOURCES}
+                      ${app_icon_win} ${licenses})
+  endif()
+  # Define target properties for Android with Qt 6 as: set_property(TARGET
+  # ${PROJECT_NAME} APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
+  # ${CMAKE_CURRENT_SOURCE_DIR}/android) For more information, see
+  # https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
+else()
+  if(ANDROID)
+    add_library(${PROJECT_NAME} SHARED ${PROJECT_SOURCES})
+    # Define properties for Android with Qt 5 after find_package() calls as:
+    # set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
+  else()
+    add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
+  endif()
+endif()
+
+target_include_directories(
+  ${PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/controllers" include)
+
+target_link_directories(${PROJECT_NAME} PRIVATE ${PROJECT_BINARY_DIR})
+
+target_link_libraries(
+  ${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets model garmin_drive_loc
+                          garmin_gpx garmin_fit ${LICENSES_LIB})
+
+set_target_properties(
+  ${PROJECT_NAME}
+  PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER analyze.manfredkern.com
+             MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
+             MACOSX_BUNDLE_SHORT_VERSION_STRING
+             ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+             MACOSX_BUNDLE TRUE
+             WIN32_EXECUTABLE TRUE)
+
+install(
+  TARGETS ${PROJECT_NAME}
+  BUNDLE DESTINATION .
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  RUNTIME DESTINATION "C:/PortableApps/QtAnalyzeGPX")
+# RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+
+if(QT_VERSION_MAJOR EQUAL 6)
+  print(${PROJECT_NAME})
+  qt_finalize_executable(${PROJECT_NAME})
+endif()
+
+qt_generate_deploy_app_script(TARGET ${PROJECT_NAME} FILENAME_VARIABLE
+                              deploy_script NO_UNSUPPORTED_PLATFORM_ERROR)
+install(SCRIPT ${deploy_script})
+
+# Create bundle on the Mac 1. cd into build directory 2. run "cmake --install ."
