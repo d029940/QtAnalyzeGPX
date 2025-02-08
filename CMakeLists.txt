@@ -9,7 +9,7 @@ project(
 set(CMAKE_INSTALL_PREFIX ${PROJECT_BINARY_DIR})
 
 # Show QtCreator non build files
-add_custom_target(info SOURCES README.md TODO.txt DeployWin.bat)
+add_custom_target(info SOURCES README.md LICENSE.md TODO.txt DeployWin.bat)
 
 # ##############################################################################
 # Some helper functions
