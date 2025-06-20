@@ -165,7 +165,7 @@ ApplicationWindow {
             FileDialog {
                 id: fileDialog
                 nameFilters: [qsTr("GPX files (*.gpx *.GPX)")]
-                fileMode: fileDialog.OpenFile
+                fileMode: FileDialog.OpenFile
                 onAccepted: _controller.openGpxFile(fileDialog.selectedFile)
             }
 

@@ -29,11 +29,14 @@ Item {
             Layout.preferredHeight: root.height
             Layout.preferredWidth: root.width
 
+            alternatingRows: false
+
             property int selectedRow: 0
 
             delegate: TreeViewDelegate {
                 id: treeDelegate
                 implicitWidth: root.width
+                indentation: -20    // negative indentation to remove the default indentation
                 required property int index
 
                 Component.onCompleted: garminDrives.expandRecursively(row)
@@ -50,6 +53,7 @@ Item {
                 contentItem: Label {
                     id: label
                     text: model.name
+                    clip: true
                 }
 
                 function hightlightRow(currentRow, selectedRow, hasChildren) {
