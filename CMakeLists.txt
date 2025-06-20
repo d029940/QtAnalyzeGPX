@@ -52,7 +52,8 @@ add_subdirectory(libs/volumeInfo)
 # Gui - QtWidgets
 add_subdirectory(apps/Widgets)
 
-# Gui - QML add_subdirectory(apps/QML)
+# Gui - QML
+add_subdirectory(apps/QML)
 
 # Sources for the the models
 add_subdirectory(models)
