@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>ListHeader.qml</file>
+        <file>RteTrkWptListView.qml</file>
+        <file>MainView.qml</file>
+        <file>MainViewForm.ui.qml</file>
+    </qresource>
+</RCC>

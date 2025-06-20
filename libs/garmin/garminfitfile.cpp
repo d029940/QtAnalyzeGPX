@@ -14,7 +14,7 @@
 **    documentation and/or other materials provided with the distribution.
 **
 ** 3. All advertising materials mentioning features or use of this software
-**    must display the following acknowledgement:
+**    must display the following acknowledged:
 **    This product includes software developed by the the organization.
 **
 ** 4. Neither the name of the copyright holder nor the names of its
@@ -35,57 +35,57 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
 **
 ****************************************************************************/
-#pragma once
+#include <QDir>
 
-#include <QObject>
-#include <QStringList>
+#include "garminfitfile.h"
+#include "garminfiles.h"
 
-// Referenced classes
-class QDomElement;
-
-///
-/// \class GarminGpxFile
-/// \brief Defines methods for analyzing the content of Garmin GPX files
-///
-class GarminGpxFile
+GarminFitFile::GarminFitFile()
 {
+    // look for all files with extension "fit" in directory and collect them
+}
 
-public:
-    explicit GarminGpxFile();
+void GarminFitFile::resetCourses()
+{
+    m_fitList.clear();
+}
 
-    ///
-    /// \brief Parses Garmin GPX file for routes, tracks and waypoints
-    /// \param file - an existing local filename with gpx/GPX extension
-    ///
-    void parse(const QString &filename);
+void GarminFitFile::readCourses(const QString &dirname)
+{
+    m_fitList.clear();
+    QDir coursesDir = QDir(dirname);
+    if (!coursesDir.exists()) {
+        return;
+    }
 
-    // Manipulate routes, tracks, waypoints lists
-    void appendRoute(const QString &route);
-    void appendTrack(const QString &track);
-    void appendWaypoint(const QString &waypoint);
+    QString ext{ GarminFiles::kCoursesExt.toLower() };
+    m_dirName = dirname;
+    coursesDir.setFilter(QDir::Files | QDir::NoDotDot | QDir::NoDot | QDir::NoSymLinks);
+    QFileInfoList coursesList = coursesDir.entryInfoList();
+    for (const QFileInfo &fitFile : std::as_const(coursesList)) {
+        if (fitFile.suffix().toLower() == ext) {
+            m_fitList.push_back(fitFile.fileName());
+            ;
+        }
+    }
+}
 
-    void reset();
+void GarminFitFile::appendCourses(const QString &course)
+{
+    m_fitList.append(course);
+}
 
-    // Getters and setters for tracks, routes and waypoints
-    QStringList trkList() const;
-    void setTrkList(const QStringList &trkList);
+QStringList GarminFitFile::fitList() const
+{
+    return m_fitList;
+}
 
-    QStringList rteList() const;
-    void setRteList(const QStringList &rteList);
+void GarminFitFile::setFitList(const QStringList &newFitList)
+{
+    m_fitList = newFitList;
+}
 
-    QStringList wptList() const;
-    void setWptList(const QStringList &wptList);
-
-private:
-    // Tag names in Garmin GPX files
-    enum GpxContentType { rte = 0, trk, wpt };
-    QStringList m_tagNames{ "rte", "trk", "wpt" };
-
-    // fills trk, rte, wpt lists
-    void listTrkRteWpt(QDomElement parent, GpxContentType type);
-
-    // Content of gpx file
-    QStringList m_trkList;
-    QStringList m_rteList;
-    QStringList m_wptList;
-};
+QString GarminFitFile::dirName() const
+{
+    return m_dirName;
+}

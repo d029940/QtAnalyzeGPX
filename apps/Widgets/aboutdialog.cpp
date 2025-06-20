@@ -59,7 +59,7 @@ ABoutDialog::ABoutDialog(QWidget *parent) : QDialog(parent), ui(new Ui::ABoutDia
     QStringList aboutText{ appVer,
                            "<br>AnalyzeGPX is a free application for analyzing Contents of",
                            "Garmin GPX files",
-                           "<br>License: BSD-4",
+                           "<br>License: BSD-3",
                            "<br>System Information",
                            qtVer,
                            licensesFromFiles };

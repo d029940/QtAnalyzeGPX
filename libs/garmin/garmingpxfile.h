@@ -35,13 +35,64 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
 **
 ****************************************************************************/
-#include <QApplication>
-#include "controller.h"
+#pragma once
 
-int main(int argc, char *argv[])
+#include <QObject>
+#include <QStringList>
+
+// Referenced classes
+class QDomElement;
+
+///
+/// \class GarminGpxFile
+/// \brief Defines methods for analyzing the content of Garmin GPX files
+///
+class GarminGpxFile
 {
-    QApplication a(argc, argv);
 
-    Controller mv{};
-    return a.exec();
-}
+public:
+    explicit GarminGpxFile();
+
+    /**
+     * @brief  Parses Garmin GPX file for routes, tracks and waypoints
+     * @param filename - an existing local filename with gpx/GPX extension
+     */
+    void parseGpxFile(const QString &filename);
+
+    // Manipulate routes, tracks, waypoints, courses lists
+    void appendRoute(const QString &route);
+    void appendTrack(const QString &track);
+    void appendWaypoint(const QString &waypoint);
+
+    void resetGpxFile();
+
+    // Getters and setters for tracks, routes and waypoints
+    QStringList trkList() const;
+    void setTrkList(const QStringList &trkList);
+
+    QStringList rteList() const;
+    void setRteList(const QStringList &rteList);
+
+    QStringList wptList() const;
+    void setWptList(const QStringList &wptList);
+
+    QString fileName() const;
+
+private:
+    // Tag names in Garmin GPX files
+    enum GpxContentType { rte = 0, trk, wpt };
+    QStringList m_tagNames{ "rte", "trk", "wpt" };
+
+    // fills trk, rte, wpt lists
+    void listTrkRteWpt(QDomElement parent, GpxContentType type);
+
+    // Content of gpx file
+    QStringList m_trkList;
+    QStringList m_rteList;
+    // TOFO: delete
+    // QStringList m_fitList;
+    QStringList m_wptList;
+
+    // Filename
+    QString m_fileName;
+};

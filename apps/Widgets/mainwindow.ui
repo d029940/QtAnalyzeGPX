@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Analyze Garmin GPX files</string>
+   <string>Show Garmin GPX &amp; FIT files</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -38,6 +38,14 @@
        </attribute>
       </widget>
       <widget class="QTableView" name="rteListView">
+       <attribute name="horizontalHeaderStretchLastSection">
+        <bool>true</bool>
+       </attribute>
+       <attribute name="verticalHeaderVisible">
+        <bool>false</bool>
+       </attribute>
+      </widget>
+      <widget class="QTableView" name="fitListView">
        <attribute name="horizontalHeaderStretchLastSection">
         <bool>true</bool>
        </attribute>
@@ -83,6 +91,16 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="deleteFitButton">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>Delete &amp;FIT File</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="exitButton">
         <property name="text">
          <string>E&amp;xit</string>
@@ -102,7 +120,7 @@
      <x>0</x>
      <y>0</y>
      <width>1048</width>
-     <height>22</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp">

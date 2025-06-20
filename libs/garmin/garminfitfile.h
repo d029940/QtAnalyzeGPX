@@ -35,13 +35,37 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
 **
 ****************************************************************************/
-#include <QApplication>
-#include "controller.h"
+#pragma once
 
-int main(int argc, char *argv[])
+#include <QStringList>
+
+class GarminFitFile
 {
-    QApplication a(argc, argv);
+public:
+    explicit GarminFitFile();
 
-    Controller mv{};
-    return a.exec();
-}
+    /**
+     * @brief Reads the fit files in the given directory
+     * @param dirname - directory to look for fit files.
+     *        Name of dir should be 'Courses'
+     */
+    void readCourses(const QString &dirname);
+
+    // Manipulate courses lists
+    void appendCourses(const QString &course);
+
+    void resetCourses();
+
+    // Getters and setters for tracks, routes and waypoints
+    QStringList fitList() const;
+    void setFitList(const QStringList &newFitList);
+
+    QString dirName() const;
+
+private:
+    // List of fit (course) files
+    QStringList m_fitList{};
+    QString m_dirName{};
+    QString m_ext{ "fit" };
+};
+

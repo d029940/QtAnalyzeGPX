@@ -42,6 +42,7 @@
 #include <QStandardPaths>
 
 #include "aboutdialog.h"
+#include "garminfiles.h"
 
 Controller::Controller()
 {
@@ -49,22 +50,27 @@ Controller::Controller()
     m_window.trkListView()->setModel(&m_trks);
     m_window.rteListView()->setModel(&m_rtes);
     m_window.wptListView()->setModel(&m_wpts);
+    m_window.fitListView()->setModel(&m_fits);
     m_window.devicesTreeView()->setModel(&m_drives);
 
     // setup selection in table / tree views (Attention: models have to be
     // assigned before)
     connect(m_window.devicesTreeView()->selectionModel(), &QItemSelectionModel::selectionChanged,
-            this, &Controller::gpxFileSelected);
+            this, &Controller::garminNodeSelected);
+    connect(m_window.fitListView()->selectionModel(), &QItemSelectionModel::selectionChanged, this,
+            &Controller::garminTableItemSelected);
 
     // Binding model changes to view
     connect(this, &Controller::onTrkModelChanged, &m_trks, &GpxTableModel::upDateModel);
     connect(this, &Controller::onRteModelChanged, &m_rtes, &GpxTableModel::upDateModel);
     connect(this, &Controller::onWptModelChanged, &m_wpts, &GpxTableModel::upDateModel);
+    connect(this, &Controller::onFitModelChanged, &m_fits, &GpxTableModel::upDateModel);
 
     // Connect all actions of main window
     connect(m_window.exitButton(), &QPushButton::clicked, &QCoreApplication::exit);
     connect(m_window.openGpxButton(), &QPushButton::clicked, this, &Controller::openGpxFile);
     connect(m_window.deleteGpxButton(), &QPushButton::clicked, this, &Controller::deleteGpxFile);
+    connect(m_window.deleteFitButton(), &QPushButton::clicked, this, &Controller::deleteFitFile);
     connect(m_window.loadGpxButton(), &QPushButton::clicked, this, &Controller::loadGarminDirs);
 
     connect(m_window.actionAbout(), &QAction::triggered, this, &Controller::showAboutDialog);
@@ -75,10 +81,9 @@ Controller::Controller()
 void Controller::loadGarminDirs()
 {
     m_drives.loadGarminDevices();
-    m_gpxFile.reset();
-    emit onTrkModelChanged(m_gpxFile.trkList());
-    emit onWptModelChanged(m_gpxFile.wptList());
-    emit onRteModelChanged(m_gpxFile.rteList());
+    reset();
+
+    updateUI();
 
     // expand garmin device tree
     QTreeView *deviceTree = m_window.devicesTreeView();
@@ -88,6 +93,7 @@ void Controller::loadGarminDirs()
     }
 }
 
+// Widget dependant
 void Controller::openGpxFile()
 {
     QStringList lst = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);
@@ -98,32 +104,69 @@ void Controller::openGpxFile()
     newGpxFileModelsUpdate(filename);
 }
 
+// Widget dependant
 void Controller::deleteGpxFile()
 {
+    // Get current selection is different in QMS and Widgets
     QModelIndexList indices = m_window.devicesTreeView()->selectionModel()->selectedIndexes();
     if (indices.isEmpty())
         return;
 
     auto gpxFile = static_cast<GarminTreeNode *>(indices.front().internalPointer());
-    QFile::remove(gpxFile->fullPath());
-    loadGarminDirs();
+    if (QFile::moveToTrash(gpxFile->fullPath()) || QFile::remove(gpxFile->fullPath())) {
+        // 1st try to move to trash bin. On drives w/o a trash bin delete the file
+        loadGarminDirs();
+    }
 }
 
-void Controller::gpxFileSelected(const QItemSelection &selected, const QItemSelection &deselected)
+void Controller::deleteFitFile()
+{
+    // Get current selection is different in QMS and Widgets
+    QModelIndexList indices = m_window.fitListView()->selectionModel()->selectedIndexes();
+    if (indices.isEmpty())
+        return;
+
+    QString filename = m_fitFiles.dirName() + "/" + indices.front().data().toString();
+    if (QFile::moveToTrash(filename) || QFile::remove(filename)) {
+        // 1st try to move to trash bin. On drives w/o a trash bin delete the file
+        loadGarminDirs();
+        newCoursesModelsUpdate(m_fitFiles.dirName());
+    }
+}
+
+// Widget dependant
+void Controller::garminNodeSelected(const QItemSelection &selected,
+                                    const QItemSelection &deselected)
 {
     if (selected.indexes().isEmpty())
         m_window.deleteGpxButton()->setDisabled(true);
     else {
-        auto gpxFile = static_cast<GarminTreeNode *>(selected.indexes().front().internalPointer());
-        if (gpxFile->childCount() == 0) {
-            // Existing GPX file selected
-            m_window.deleteGpxButton()->setDisabled(false);
-            newGpxFileModelsUpdate(gpxFile->fullPath());
-
+        auto node = static_cast<GarminTreeNode *>(selected.indexes().front().internalPointer());
+        if (node->childCount() == 0) {
+            // Could be the node for the courses directory or a gpx file
+            if (node->fullPath().toLower().endsWith("/" + GarminFiles::kCoursesPath.toLower())) {
+                // course node
+                newCoursesModelsUpdate(node->fullPath());
+            } else {
+                // Existing GPX file selected
+                newGpxFileModelsUpdate(node->fullPath());
+            }
         } else {
-            m_window.deleteGpxButton()->setDisabled(true);
+            reset();
+            updateUI();
         }
     }
+}
+
+void Controller::garminTableItemSelected(const QItemSelection &selected,
+                                         const QItemSelection &deselected)
+{
+    // Check also if a fit file is selected
+    QModelIndexList indices = m_window.fitListView()->selectionModel()->selectedIndexes();
+    if (indices.isEmpty())
+        m_window.deleteFitButton()->setDisabled(true);
+    else
+        m_window.deleteFitButton()->setDisabled(false);
 }
 
 void Controller::showAboutDialog()
@@ -132,16 +175,57 @@ void Controller::showAboutDialog()
     dlg.exec();
 }
 
-void Controller::newGpxFileModelsUpdate(const QString &filename)
+void Controller::reset()
 {
-    m_gpxFile.reset();
-    m_gpxFile.parse(filename);
-    // either use signal and slot to update the tableviews (bindings)
+    m_gpxFile.resetGpxFile();
+    m_fitFiles.resetCourses();
+}
+
+void Controller::updateUI()
+{
+    // update the table views
     emit onTrkModelChanged(m_gpxFile.trkList());
     emit onWptModelChanged(m_gpxFile.wptList());
     emit onRteModelChanged(m_gpxFile.rteList());
+    emit onFitModelChanged(m_fitFiles.fitList());
+
+    // Check status of "Delete GPX" button
+    if (!m_gpxFile.trkList().isEmpty() || !m_gpxFile.rteList().isEmpty()
+        || !m_gpxFile.wptList().isEmpty()) {
+        m_window.deleteGpxButton()->setDisabled(false);
+    } else {
+        m_window.deleteGpxButton()->setDisabled(true);
+    }
+
+    // Check status of "Delete FIT" button
+    if (m_fitFiles.fitList().isEmpty()) {
+        m_window.deleteFitButton()->setDisabled(true);
+    } else {
+        // Check also if a fit file is selected
+        QModelIndexList indices = m_window.fitListView()->selectionModel()->selectedIndexes();
+        if (indices.isEmpty())
+            m_window.deleteFitButton()->setDisabled(true);
+        else
+            m_window.deleteFitButton()->setDisabled(false);
+    }
+}
+
+// UI independent
+void Controller::newGpxFileModelsUpdate(const QString &filename)
+{
+    reset();
+    m_gpxFile.parseGpxFile(filename);
+    // either use signal and slot to update the tableviews (bindings)
+    updateUI();
     // or update the tableviews directly
     //    m_trks.upDateModel(m_gpxFile.trkList());
     //    m_wpts.upDateModel(m_gpxFile.wptList());
     //    m_rtes.upDateModel(m_gpxFile.rteList());
+}
+
+void Controller::newCoursesModelsUpdate(const QString &dirName)
+{
+    reset();
+    m_fitFiles.readCourses(dirName);
+    updateUI();
 }

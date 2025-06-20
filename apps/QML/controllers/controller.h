@@ -35,13 +35,50 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
 **
 ****************************************************************************/
-#include <QApplication>
-#include "controller.h"
+#pragma once
 
-int main(int argc, char *argv[])
+#include <QObject>
+// #include "mainwindow.h"
+#include "garmingpxfile.h"
+#include "garminfitfile.h"
+#include "gpxtablemodel.h"
+#include "garmintreemodel.h"
+
+class Controller : public QObject
 {
-    QApplication a(argc, argv);
+    Q_OBJECT
 
-    Controller mv{};
-    return a.exec();
-}
+public:
+    Controller(GarminTreeModel &drives, const GpxTableModel &trks, const GpxTableModel &rtes,
+               const GpxTableModel &wpts, const GpxTableModel &fits);
+
+public slots:
+    Q_INVOKABLE void loadGarminDirs();
+    Q_INVOKABLE void openGpxFile(const QUrl &url);
+    Q_INVOKABLE void getSelectedRow(const QModelIndex &index);
+
+    void deleteGpxFile();
+    //    void gpxFileSelected(const QItemSelection &selected, const QItemSelection &deselected);
+    void showAboutDialog();
+
+    void reset();
+
+signals:
+    void onTrkModelChanged(const QStringList &newItems);
+    void onRteModelChanged(const QStringList &newItems);
+    void onWptModelChanged(const QStringList &newItems);
+    void onFitModelChanged(const QStringList &newItems);
+
+private:
+    //    MainWindow m_window;
+    GarminGpxFile m_gpxFile{}; // Current GPX file shown in table views
+    GarminFitFile m_fitFiles{}; // Current courses shown in table view
+    const GpxTableModel *m_trks; // Table view for tracks
+    const GpxTableModel *m_rtes; // Table view for routes
+    const GpxTableModel *m_wpts; // Table view for waypoints (POIs)
+    const GpxTableModel *m_fits; // Table view for courses
+    GarminTreeModel *m_drives; // Drives recognized by Garmin gps
+
+    void newGpxFileModelsUpdate(
+            const QString &filename); // updates m_trks, m_rtes, m_wpts when new GPX file is loaded
+};

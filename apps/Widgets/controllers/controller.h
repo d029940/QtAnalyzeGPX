@@ -40,6 +40,7 @@
 #include <QObject>
 #include "mainwindow.h"
 #include "garmingpxfile.h"
+#include "garminfitfile.h"
 #include "gpxtablemodel.h"
 #include "garmintreemodel.h"
 
@@ -51,24 +52,61 @@ public:
     Controller();
 
 public slots:
+    /**
+     * @brief loads the garmin tree, consisting of the mounted drives (with garmin folder).
+     *        If available the tree contans nodes for the gpx files and for the courses folder.
+     *        The tables tracks, routes, waypoints and courses are resetted (emptied)
+     */
     void loadGarminDirs();
+    /**
+     * @brief open a file chooses to select a gpx file. The contents
+     *        will be shown in the tracks, routes and waypoints tables.
+     */
     void openGpxFile();
+    /**
+     * @brief deletes selected gpx file from disc.
+     */
     void deleteGpxFile();
-    void gpxFileSelected(const QItemSelection &selected, const QItemSelection &deselected);
+    /**
+     * @brief deletes selected fit file from disc.
+     */
+    void deleteFitFile();
+    /**
+     * @brief if a gpx file is selected, the tables tracks, routes and waypoints are populated
+     *        with resp. info from gpx file.
+     *        if a course node is selected, the courses directory is read and the available
+     *        courses are displayed in the courses table
+     * @param selected - selected node in tree
+     * @param deselected - node used
+     */
+    void garminNodeSelected(const QItemSelection &selected, const QItemSelection &deselected);
+    void garminTableItemSelected(const QItemSelection &selected, const QItemSelection &deselected);
     void showAboutDialog();
+
+    void reset();
 
 signals:
     void onTrkModelChanged(const QStringList &newItems);
     void onRteModelChanged(const QStringList &newItems);
     void onWptModelChanged(const QStringList &newItems);
+    void onFitModelChanged(const QStringList &newItems);
 
 private:
     MainWindow m_window;
     GarminGpxFile m_gpxFile{}; // Current GPX file shown in table views
-    GpxTableModel m_trks{ tr("Tracks") }; // Table view for tracks
-    GpxTableModel m_rtes{ tr("Routes") }; // Table view for routes
-    GpxTableModel m_wpts{ tr("Waypoints") }; // Table view for waypoints (POIs)
+    GarminFitFile m_fitFiles{}; // Current courses shown in table view
+
+    GpxTableModel m_trks{ GpxTableModel::ContentType::trk, tr("Tracks") }; // Table view for tracks
+    GpxTableModel m_rtes{ GpxTableModel::ContentType::rte, tr("Routes") }; // Table view for routes
+    GpxTableModel m_wpts{ GpxTableModel::ContentType::wpt,
+                          tr("Waypoints") }; // Table view for waypoints (POIs)
+    GpxTableModel m_fits{ GpxTableModel::ContentType::fit,
+                          tr("Courses") }; // Table view for waypoints (POIs)
     GarminTreeModel m_drives{ tr("Drives") }; // Drives recognized by Garmin gps
 
-    void newGpxFileModelsUpdate(const QString &filename); // updates m_trks, m_rtes, m_wpts when new GPX file is loaded
+    void newGpxFileModelsUpdate(
+            const QString &filename); // updates m_trks, m_rtes, m_wpts when new GPX file is loaded
+    void
+    newCoursesModelsUpdate(const QString &dirName); // updates m_fits when new courses are loaded
+    void updateUI();
 };

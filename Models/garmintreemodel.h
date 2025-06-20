@@ -37,41 +37,75 @@
 ****************************************************************************/
 #pragma once
 
-#include <QAbstractTableModel>
+#include <memory>
+#include <QAbstractItemModel>
+#include "garmintreenode.h"
 
-class GpxTableModel : public QAbstractTableModel
+class GarminTreeModel : public QAbstractItemModel
 {
     Q_OBJECT
+    // Connection to QML
+    Q_PROPERTY(QString pathName READ pathName WRITE setPathName NOTIFY pathNameChanged)
 
 public:
-    explicit GpxTableModel(const QString &header, QObject *parent = nullptr);
+    explicit GarminTreeModel(const QString &header, QObject *parent = nullptr);
 
+    enum DirRoles { NameRole = Qt::UserRole + 1, FullPathRole };
+    Q_ENUM(DirRoles)
+
+    /**
+     * @brief  Search all connected volumes/devices for
+     * 1. Garmin/GPX folder (lower or upper case) and
+     * 2. GPX files (files with extension GPX - lower or upper case)
+     * 3. Load the devices and the files in the tree model
+     *
+     * At start the tree model (children of the root) is cleared
+     */
+    void loadGarminDevices();
+
+    /**
+     * @brief  Extracts the full path of the GPX file selected in the treeview
+     * @param index = QModelIndex returned by click event of the treeview
+     * @return the full path of the selected GPX file
+     *         or QString() if a directory/volume has been selected
+     */
+    const QString getPathFromTreeNodeFromIndex(QModelIndex index) const;
+
+    // ----- QAbstractItemModel interface ----
     // Header:
     QVariant headerData(int section, Qt::Orientation orientation,
                         int role = Qt::DisplayRole) const override;
 
-    // Basic functionality:
-    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+    QModelIndex index(int row, int column, const QModelIndex &parent) const override;
+    QModelIndex parent(const QModelIndex &child) const override;
+    int rowCount(const QModelIndex &parent) const override;
+    int columnCount(const QModelIndex &parent) const override;
+    QVariant data(const QModelIndex &index, int role) const override;
 
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    // ----- Define Roles ----
+    QHash<int, QByteArray> roleNames() const override;
 
-    // Editable:
-    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
+    // Debug
+    void createTestData();
+    void dumpTree() const;
 
-    Qt::ItemFlags flags(const QModelIndex &index) const override;
+    QString pathName() const;
+    void setPathName(const QString &newPathName);
 
-    // Add data:
-    bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
-
-    // Remove data:
-    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
-
-public slots:
-    // Update Model when model data change
-    void upDateModel(const QStringList &newItems);
+signals:
+    void modelChanged();
+    void pathNameChanged();
 
 private:
-    QStringList m_items;
-    QString m_header;
+    // Roles for displaying
+    QHash<int, QByteArray> m_roles;
+
+    /**
+     * @brief points to the root of GarminTreeNodes
+     *        which store volumes with their gpx files in "Garmin/GPX" folder
+     */
+    std::shared_ptr<GarminTreeNode> m_root;
+
+    QString m_header; // Tree column header
+    QString m_pathName;
 };

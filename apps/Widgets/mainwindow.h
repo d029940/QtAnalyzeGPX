@@ -61,10 +61,12 @@ public:
     QPushButton *openGpxButton() const;
     QPushButton *loadGpxButton() const;
     QPushButton *deleteGpxButton() const;
+    QPushButton *deleteFitButton() const;
     QAction *actionAbout() const;
     QTableView *trkListView() const;
     QTableView *rteListView() const;
     QTableView *wptListView() const;
+    QTableView *fitListView() const;
     QTreeView *devicesTreeView() const;
 
 private:

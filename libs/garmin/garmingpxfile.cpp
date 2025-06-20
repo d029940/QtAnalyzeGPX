@@ -35,22 +35,24 @@
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
 **
 ****************************************************************************/
-#include <memory>
 #include <QDebug>
 #include <QDomDocument>
 #include <QFile>
+#include <QDir>
 
 #include "garmingpxfile.h"
 
 GarminGpxFile::GarminGpxFile() { }
 
 // NOTE: https://doc-snapshots.qt.io/qt6-6.4/xml-changes-qt6.html
-void GarminGpxFile::parse(const QString &filename)
+
+void GarminGpxFile::parseGpxFile(const QString &filename)
 {
     QFile file{ filename };
+    m_fileName = filename;
     QDomDocument gpxFileDOM;
 
-    // Load the fike
+    // Load the file
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qDebug() << "Failed to open file " << file.fileName();
         qDebug() << "Error " << file.errorString();
@@ -92,7 +94,7 @@ void GarminGpxFile::appendWaypoint(const QString &waypoint)
     m_wptList.append(waypoint);
 }
 
-void GarminGpxFile::reset()
+void GarminGpxFile::resetGpxFile()
 {
     m_rteList.clear();
     m_trkList.clear();
@@ -131,11 +133,15 @@ void GarminGpxFile::setWptList(const QStringList &wptList)
     m_wptList = wptList;
 }
 
+QString GarminGpxFile::fileName() const
+{
+    return m_fileName;
+}
+
 // ----- Role names for displaying in the model ---------
 
 void GarminGpxFile::listTrkRteWpt(QDomElement parent, GpxContentType type)
 {
-
     QString tagName;
     QStringList *list = nullptr;
     switch (type) {

@@ -39,6 +39,7 @@
 #include <QDebug>
 
 #include "garmintreemodel.h"
+#include "garminfiles.h"
 
 using namespace std;
 
@@ -62,29 +63,27 @@ void GarminTreeModel::loadGarminDevices()
     // Find all mounted volumes
     QList<QStorageInfo> mountedVolumes{ QStorageInfo::mountedVolumes() };
     for (const auto &vol : mountedVolumes) {
-        QDir topLevelDir = QDir(vol.rootPath());
-        topLevelDir.setFilter(QDir::Dirs | QDir::QDir::NoDotAndDotDot | QDir::NoSymLinks);
-        QFileInfoList topLevelList = topLevelDir.entryInfoList();
+        GarminFiles files{ vol.rootPath() };
+        files.find();
 
-        // Check if a Garmin folder is at top level
-        for (const auto &info : topLevelList) {
-            if (QDir(info.absoluteFilePath()).dirName().toLower() == "garmin") {
-                QDir garminDir = QDir(info.absoluteFilePath());
-                garminDir.setFilter(QDir::Dirs | QDir::QDir::NoDotAndDotDot | QDir::NoSymLinks);
-                QFileInfoList garminFolderList = garminDir.entryInfoList();
+        // Process courses
+        if (!files.courseFiles().empty()) {
+            auto volTreeNode =
+                    make_shared<GarminTreeNode>(vol.name() + tr(" (Courses)"), files.coursesPath());
+            m_root->appendChild(volTreeNode);
+        }
 
-                // Check if a GPX folder is found in the Garmin folder
-                for (const auto &info : garminFolderList) {
-                    if (QDir(info.absoluteFilePath()).dirName().toLower() == "gpx") {
-                        auto gpxVol =
-                                make_shared<GarminTreeNode>(vol.name(), info.absoluteFilePath());
-                        // To avoid empty Garmin/GPX folders in the tree
-                        // call readGpxFilesInFolder
-                        if (readGpxFilesInFolder(gpxVol)) {
-                            m_root->appendChild(gpxVol);
-                        }
-                    }
-                }
+        // Process GPX files
+        if (!files.gpxFiles().empty()) {
+            shared_ptr<GarminTreeNode> volTreeNode =
+                    make_shared<GarminTreeNode>(vol.name(), files.gpxPath());
+            m_root->appendChild(volTreeNode);
+            // for every gpx file, a tree node needs to be created
+            for (const QString &file : files.gpxFiles()) {
+                QFileInfo fileInfo{ QFileInfo(file) };
+                shared_ptr<GarminTreeNode> gpxFileNode = make_shared<GarminTreeNode>(
+                        fileInfo.baseName(), fileInfo.absoluteFilePath(), volTreeNode);
+                volTreeNode->appendChild(gpxFileNode);
             }
         }
     }
@@ -114,26 +113,6 @@ QVariant GarminTreeModel::headerData(int section, Qt::Orientation orientation, i
     }
 
     return m_header;
-}
-
-// ----- Private helpers -----
-
-bool GarminTreeModel::readGpxFilesInFolder(const shared_ptr<GarminTreeNode> vol)
-{
-    QDir gpxDir = QDir(vol->fullPath());
-    gpxDir.setFilter(QDir::Files | QDir::NoDotDot | QDir::NoDot | QDir::NoSymLinks);
-    QFileInfoList gpxFilesList = gpxDir.entryInfoList();
-    for (const QFileInfo &gpxFile : gpxFilesList) {
-        if (gpxFile.suffix().toLower() == "gpx") {
-            shared_ptr<GarminTreeNode> gpxFileNode = make_shared<GarminTreeNode>(
-                    gpxFile.baseName(), gpxFile.absoluteFilePath(), vol);
-            vol->appendChild(gpxFileNode);
-        }
-    }
-    if (vol->childCount() > 0)
-        return true;
-    else
-        return false;
 }
 
 // ----- Debugging & Test ------
@@ -244,4 +223,17 @@ QVariant GarminTreeModel::data(const QModelIndex &index, int role) const
 QHash<int, QByteArray> GarminTreeModel::roleNames() const
 {
     return m_roles;
+}
+
+QString GarminTreeModel::pathName() const
+{
+    return m_pathName;
+}
+
+void GarminTreeModel::setPathName(const QString &newPathName)
+{
+    if (m_pathName == newPathName)
+        return;
+    m_pathName = newPathName;
+    emit pathNameChanged();
 }
