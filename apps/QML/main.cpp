@@ -37,7 +37,8 @@ int main(int argc, char *argv[])
     context->setContextProperty("_garminDrives", &garminDrives);
     context->setContextProperty("_controller", &mainController);
 
-    const QUrl url(u"qrc:/AnalyzeGPX/MainView.qml"_qs);
+    using namespace Qt::Literals::StringLiterals;
+    const QUrl url(u"qrc:/AnalyzeGPX/MainView.qml"_s);
     QObject::connect(
             &engine, &QQmlApplicationEngine::objectCreated, &app,
             [url](QObject *obj, const QUrl &objUrl) {

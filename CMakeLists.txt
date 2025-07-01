@@ -35,6 +35,8 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+find_package(Qt6 REQUIRED COMPONENTS Xml)
+
 # Resources
 set(APP_RESOUCRE_DIR "${PROJECT_SOURCE_DIR}/resources")
 add_subdirectory(resources)
@@ -49,11 +51,11 @@ add_subdirectory(libs/garmin)
 # Drive / Volume info
 add_subdirectory(libs/volumeInfo)
 
+# Sources for the the models
+add_subdirectory(models)
+
 # Gui - QtWidgets
 add_subdirectory(apps/Widgets)
 
 # Gui - QML
 add_subdirectory(apps/QML)
-
-# Sources for the the models
-add_subdirectory(models)

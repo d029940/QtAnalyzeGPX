@@ -21,6 +21,9 @@ Item {
         height: myText.implicitHeight + 2 * mySpacing
         width: root.width
         color: activePalette.base
+        Component.onCompleted: {
+
+        }
 
         ColumnLayout {
             id: col

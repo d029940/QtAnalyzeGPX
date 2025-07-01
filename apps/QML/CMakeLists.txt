@@ -31,6 +31,14 @@ qt_add_qml_module(
   ListHeader.qml
   DevicesTreeView.qml)
 
+print(APP_RESOUCRE_DIR)
+# Windows app icon
+set(app_icon_win "${APP_RESOUCRE_DIR}/win.rc")
+print(app_icon_win)
+
+# Licenses of the app
+set(licenses "${APP_RESOUCRE_DIR}/Licenses/01_License_BSD-4.txt")
+
 set_target_properties(
   ${PROJECT_NAME}
   PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER analyze.manfredkern.com

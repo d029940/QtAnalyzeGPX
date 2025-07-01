@@ -49,13 +49,14 @@ target_link_libraries(
 
 set_target_properties(${PROJECT_NAME} PROPERTIES WIN32_EXECUTABLE TRUE)
 
+set(INSTALL_BINDIR "C:/PortableApps/QtAnalyzeGPX")
+set(CMAKE_INSTALL_LIBDIR "C:/PortableApps/QtAnalyzeGPX")
 install(
   TARGETS ${PROJECT_NAME}
-  BUNDLE DESTINATION .
-  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  RUNTIME DESTINATION "C:/PortableApps/QtAnalyzeGPX")
-# RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+  BUNDLE DESTINATION . # LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  RUNTIME DESTINATION ${INSTALL_BINDIR})
 
 qt_generate_deploy_app_script(TARGET ${PROJECT_NAME} OUTPUT_SCRIPT
                               deploy_script NO_UNSUPPORTED_PLATFORM_ERROR)
+print(deploy_script)
 install(SCRIPT ${deploy_script})
