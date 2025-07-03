@@ -10,7 +10,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(
-  Qt6 6.8
+  Qt6
   COMPONENTS Quick
   REQUIRED)
 
@@ -54,4 +54,9 @@ target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Quick model garmin_drive_loc
 install(
   TARGETS ${PROJECT_NAME}
   BUNDLE DESTINATION .
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
+qt_generate_deploy_app_script(TARGET ${PROJECT_NAME} OUTPUT_SCRIPT
+                              deploy_script NO_UNSUPPORTED_PLATFORM_ERROR)
+install(SCRIPT ${deploy_script})

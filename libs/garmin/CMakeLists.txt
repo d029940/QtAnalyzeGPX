@@ -15,6 +15,7 @@ find_package(Qt6 REQUIRED COMPONENTS Xml)
 
 # Alternative: https://pugixml.org, C++ string, filesystem fstream
 
+set(CMAKE_FIND_LIBRARY_SUFFIXES ".a" “.so”)
 add_library(garmin_gpx STATIC garmingpxfile.cpp garmingpxfile.h)
 target_link_libraries(garmin_gpx PRIVATE Qt6::Xml)
 target_include_directories(garmin_gpx INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
