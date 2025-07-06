@@ -7,9 +7,11 @@ project(
   LANGUAGES CXX)
 
 set(CMAKE_INSTALL_PREFIX ${PROJECT_BINARY_DIR})
+# To change the values of CMAKE_INSTALL_BINDIR or CMAKE_INSTALL_LIBDIR, set the
+# variables before the Qt6Core package is found.
 
 # Show QtCreator non build files
-add_custom_target(info SOURCES README.md LICENSE.md TODO.txt DeployWin.bat)
+add_custom_target(info SOURCES README.md LICENSE.md TODO.txt)
 
 # ##############################################################################
 # Some helper functions
