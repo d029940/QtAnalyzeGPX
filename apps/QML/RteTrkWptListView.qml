@@ -35,7 +35,9 @@ Item {
 
             delegate: Label {
                 id: mytext
-                text: model.name
+                required property string name
+                // text: model.name
+                text: name
             }
         }
     }

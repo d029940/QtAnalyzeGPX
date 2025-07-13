@@ -11,7 +11,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(
   Qt6
-  COMPONENTS Quick
+  COMPONENTS QML Quick
   REQUIRED)
 
 qt_standard_project_setup()
@@ -29,7 +29,9 @@ qt_add_qml_module(
   MainView.qml
   RteTrkWptListView.qml
   ListHeader.qml
-  DevicesTreeView.qml)
+  DevicesTreeView.qml
+  DEPENDENCIES
+  QtCore)
 
 print(APP_RESOUCRE_DIR)
 # Windows app icon
@@ -57,6 +59,6 @@ install(
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
-qt_generate_deploy_app_script(TARGET ${PROJECT_NAME} OUTPUT_SCRIPT
-                              deploy_script NO_UNSUPPORTED_PLATFORM_ERROR)
+qt_generate_deploy_qml_app_script(TARGET ${PROJECT_NAME} OUTPUT_SCRIPT
+                                  deploy_script NO_UNSUPPORTED_PLATFORM_ERROR)
 install(SCRIPT ${deploy_script})
