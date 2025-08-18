@@ -1,3 +1,4 @@
+// pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Basic
@@ -38,6 +39,8 @@ Item {
                 implicitWidth: root.width
                 indentation: -20    // negative indentation to remove the default indentation
                 required property int index
+                // required property int row
+                // required property int column
 
                 Component.onCompleted: garminDrives.expandRecursively(row)
 
